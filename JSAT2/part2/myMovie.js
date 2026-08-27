@@ -20,3 +20,8 @@ myMovie.year = 1962;
 
 // Print the myMovie object to the console with the updated properties
 console.log("myMovie object with updated rating and year:", myMovie);
+
+// Remove the summary property from myMovie
+delete myMovie.summary;
+
+console.log("myMovie object without the summary:", myMovie);
