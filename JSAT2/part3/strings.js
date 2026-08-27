@@ -35,3 +35,19 @@ console.log("myName in uppercase is:", myName);
 myName = myName.toLowerCase();
 // Print the lowercase version of myName to the console
 console.log("myName in lowercase is:", myName);
+
+// Join hello and myName using concat()
+const joinedString = hello.concat(" ", myName); // also add a space between hello and myName
+console.log("The concatenated string is:", joinedString);
+
+// Remove the leading spaces from anotherString using trim()
+const trimmedString = anotherString.trim();
+console.log("The trimmed string is:", trimmedString);
+
+// Replace "is a" in myString with an empty string
+const replacedString = myString.replace("is a", "");
+console.log("The replaced string is:", replacedString);
+
+// Split myString wherever there is a space
+const splitString = myString.split(" ");
+console.log("The split string is:", splitString);
