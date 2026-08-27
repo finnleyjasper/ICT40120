@@ -34,7 +34,12 @@
     numbers.splice(numbers.indexOf(31), 1); // At the index of 31, remove 1 element
     console.log("The array after removing 8 and 31 is:", numbers);
 
-    // Sequential search: search the array one element at a time for a target value
+    /**
+     * Searches an array one element at a time for a target value.
+     * @param {number[]} array - The array to search.
+     * @param {number} value - The target value to find.
+     * @returns {number} The target value's index, or -1 if it is not found.
+     */
     function sequentialSearch(array, value) {
       // While the index is less than the length, search for the value
       for (let index = 0; index < array.length; index++) {
@@ -49,6 +54,43 @@
 
     console.log("The index of 25 is:", sequentialSearch(numbers, 25));
     console.log("Searching for an element not in the array returns:", sequentialSearch(numbers, 100));
+
+    /**
+     * Searches a sorted array for a target value using binary search.
+     * @param {number[]} array - The sorted array to search.
+     * @param {number} key - The target value to find.
+     * @returns {number} The target value's index, or -1 if it is not found.
+     */
+    function binarySearch(array, key) {
+        // Not found by default
+        let found = -1;
+
+        // Create the start and end points
+        let start = 0;
+        let end = array.length - 1;
+
+        while (start <= end) {
+            // Find mid point
+            let mid = Math.floor((start + end) / 2);
+
+            // Test if the mid point is what we are looking for
+            if (array[mid] === key) {
+                found = mid;
+                break;
+            } else if (array[mid] < key) {
+                // Search right half of array
+                start = mid + 1;
+            } else {
+                // Search left half of array
+                end = mid - 1;
+            }
+        }
+        // Return the index of the found element or -1 if not found
+        return found;
+    }
+
+    console.log("The index of 25 using binary search is:", binarySearch(numbers, 25));
+    console.log("Searching for an element not in the array using binary search returns:", binarySearch(numbers, 100));
 
   </script>
 </body>
