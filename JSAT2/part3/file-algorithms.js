@@ -21,3 +21,5 @@ function saveStringToFile(fileName, text) {
 function readTextFile(fileName) {
   return fs.readFileSync(fileName, "utf8");
 }
+
+module.exports = { saveStringToFile, readTextFile };
