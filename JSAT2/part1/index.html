@@ -34,6 +34,22 @@
     numbers.splice(numbers.indexOf(31), 1); // At the index of 31, remove 1 element
     console.log("The array after removing 8 and 31 is:", numbers);
 
+    // Sequential search: search the array one element at a time for a target value
+    function sequentialSearch(array, value) {
+      // While the index is less than the length, search for the value
+      for (let index = 0; index < array.length; index++) {
+        // If the element at the current index is equal to the value, return the index
+        if (array[index] === value) {
+          return index;
+        }
+      }
+      // If the value is not found, return -1
+      return -1;
+    }
+
+    console.log("The index of 25 is:", sequentialSearch(numbers, 25));
+    console.log("Searching for an element not in the array returns:", sequentialSearch(numbers, 100));
+
   </script>
 </body>
 
