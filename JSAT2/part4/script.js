@@ -55,5 +55,22 @@ function createMovieArray() {
   console.log("Unsorted movie array:", movies);
 }
 
+/**
+ * Sorts the movies array in ascending numeric order by each movie's ID
+ * and prints the sorted array to the console.
+ * @returns {void}
+ */
+function sortMoviesById() {
+    // Sort the movie array in ascending order by Movie ID, making sure to do a numeric comparison instead of a string comparison!
+    movies.sort(function(a, b) {
+    return a.movieId - b.movieId;
+    });
+
+    // Log the sorted movie array to the console
+    console.log("Movies sorted by Movie ID:", movies);
+}
+
 // Run the createMovieArray function when the button is clicked
-document.getElementById("run-script").addEventListener("click", createMovieArray);
+document.getElementById("make-movies").addEventListener("click", createMovieArray);
+// Run the sortMoviesById function when the button is clicked
+document.getElementById("sort-movies").addEventListener("click", sortMoviesById);
