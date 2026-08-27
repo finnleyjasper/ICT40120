@@ -1,3 +1,7 @@
+/**
+ * Runs the array sorting, insertion, removal, and search tasks and logs the results.
+ * @returns {void}
+ */
 function runArrayTasks() {
     // Create an array of numbers
     const numbers = [11, 5, 8, 3, 25, 16, 31, 45, 14, 20];
