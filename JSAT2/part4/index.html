@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movies</title>
+</head>
+
+<body>
+  <main>
+    <h1>JavaScript Movies</h1>
+    <button id="run-script" type="button">Create movie!</button>
+  </main>
+
+  <script src="movie.js"></script>
+
+  <!-- Add an event listener to the button to run the movie tasks when clicked -->
+  <script>
+    document.getElementById("run-script").addEventListener("click", function() {
+      const movie = new Movie("Inception", "Christopher Nolan", 2010, "Science Fiction");
+      console.log("Movie created:", movie);
+    });
+  </script>
+</body>
+
+</html>
