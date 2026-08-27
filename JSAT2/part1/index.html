@@ -28,6 +28,12 @@
     numbers.sort(function(a, b){return a - b});
     console.log("The array with the new numbers is:", numbers);
 
+    // Remove 8 and 31 and make sure the remaining numbers stay in ascending order
+    // Use splice to remove elements by their index - delete() will leave undefined holes!
+    numbers.splice(numbers.indexOf(8), 1); // At the index of 8, remove 1 element
+    numbers.splice(numbers.indexOf(31), 1); // At the index of 31, remove 1 element
+    console.log("The array after removing 8 and 31 is:", numbers);
+
   </script>
 </body>
 
