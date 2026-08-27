@@ -22,6 +22,12 @@
     // Simply using sort() will not work as expected because it sorts elements as strings by default.
     numbers.sort(function(a, b){return a - b});
     console.log("The array in ascending order is:", numbers);
+
+    // Insert three more numbers and keep the array in ascending order
+    numbers.push(19, 23, 30);
+    numbers.sort(function(a, b){return a - b});
+    console.log("The array with the new numbers is:", numbers);
+
   </script>
 </body>
 
