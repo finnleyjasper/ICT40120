@@ -70,7 +70,72 @@ function sortMoviesById() {
     console.log("Movies sorted by Movie ID:", movies);
 }
 
+/**
+ * Searches a sorted array for a target value using binary search (exact same code as in part 1)
+ * @param {Movie[]} array - The sorted movie array to search.
+ * @param {number} key - The target value to find.
+ * @returns {number} The target value's index, or -1 if it is not found.
+ */
+function binarySearch(array, key) {
+    // Not found by default
+    let found = -1;
+
+    // Create the start and end points
+    let start = 0;
+    let end = array.length - 1;
+
+    while (start <= end) {
+        // Find mid point
+        let mid = Math.floor((start + end) / 2);
+
+        // Test if the mid point is what we are looking for
+        if (array[mid].movieId === key) {
+            found = mid;
+            break;
+        } else if (array[mid].movieId < key) {
+            // Search right half of array
+            start = mid + 1;
+        } else {
+            // Search left half of array
+            end = mid - 1;
+        }
+    }
+    // Return the index of the found element or -1 if not found
+    return found;
+}
+
+/**
+ * Finds the movie at index 1 in the array. Assumes createMovieArray has been called.
+ * @returns {number} The index of the movie that was found.
+ */
+function findExistingMovie() {
+
+    const movieIDToFind = movies[1].movieId; // Get the ID of the second movie in the array
+    console.log("Searching for movie with ID:", movies[1].movieId, movies[1].title);
+
+    // Binary search requires the array to be sorted first.
+    sortMoviesById();
+
+    const foundIndex = binarySearch(movies, movieIDToFind);
+    console.log("Movie found at index:", foundIndex);
+    return foundIndex;
+}
+
+/**
+ * Searches for the invalid ID -500 to demonstrate a not-found result.
+ * @returns {number} -1 because no movie has this ID.
+ */
+function findMissingMovie() {
+    const foundIndex = binarySearch(movies, -500);
+    console.log("Movie at index -500 not found; result is:", foundIndex);
+    return foundIndex;
+}
+
 // Run the createMovieArray function when the button is clicked
 document.getElementById("make-movies").addEventListener("click", createMovieArray);
 // Run the sortMoviesById function when the button is clicked
 document.getElementById("sort-movies").addEventListener("click", sortMoviesById);
+// Search for an existing movie when the button is clicked
+document.getElementById("find-movie").addEventListener("click", findExistingMovie);
+// Search for an ID that does not exist when the button is clicked
+document.getElementById("dont-find-movie").addEventListener("click", findMissingMovie);
