@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "jsdoc": "^4.0.5"
+  },
+  "name": "movie-appv3",
+  "version": "3.0.0",
+  "description": "This app will allow the user to view and manipulate a list of movies.\r The movie contains a title and a year.\r # MovieList - Class\r ## Attributes\r movieList - a list of movies\r rootId - the root element where the list is to appear",
+  "main": "app.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "doc": "jsdoc -r ./js -d ./docs"
+  },
+  "author": "",
+  "license": "ISC"
+}
