@@ -1,305 +1,228 @@
 /**
- * @file app.js 
- * @description This file contains the JavaScript for our movie app. 
- * It contains the movieList instance, the event functions for the UI 
- * and other UI functionality
- * cspell:Ignore Amberle Seidl tabcontent tablinks Shawshank Krull Starfighter
- * @author Amberle Seidl
- * @version 3.1.0
- * @since v3 
- * getData() 
- * onUpIndexChange()
- * and confirm code in the deleteClick()
- * Bounds checking for getData() and deleteClick()
+ * @file app.js
+ * @description Creates the movie list and connects it to the application UI.
  */
 
 /**
- * @global 
- * @description the initial list of 
- * movies for our app.
+ * The initial movies displayed by the application.
+ * @type {Movie[]}
  */
-let initMovies = [
-  {title: "The Shawshank Redemption", year: 1994},
-  {title: "The Godfather", year: 1972},
-  {title: "The Godfather: Part II", year: 1974},
-  {title: "The Dark Knight", year: 2008},
-  {title: "Krull", year: 1983},
-  {title: "The Last Starfighter", year: 1981}
-]
+const initialMovies = [
+  new Movie(101, "The Shawshank Redemption", 1994, 5),
+  new Movie(205, "The Godfather", 1972, 5),
+  new Movie(312, "The Godfather: Part II", 1974, 4),
+  new Movie(418, "The Dark Knight", 2008, 5),
+  new Movie(523, "Krull", 1983, 3),
+  new Movie(634, "The Last Starfighter", 1981, 4)
+];
 
 /**
- * @memberof MovieList
- * @instance movieList
- * @param {string} - The id name of the element where we want to have our 
- * movieList appear in the UI
- * @param {Array} initMovies - The initial array of movies in our movie 
- * list.
- * @global 
- * @description the moviesList instance to keep track of our list of movies 
- * in the app
+ * The MovieList instance used by the application.
+ * @type {MovieList}
  */
-let movieList = new MovieList('list', initMovies);
+const movieList = new MovieList("list", initialMovies);
 
-// Get all buttons from our application
-const searchBtn = document.getElementById('searchBtn');
-const sortA2ZBtn = document.getElementById('sortA2ZBtn');
-const sortZ2ABtn = document.getElementById('sortZ2ABtn');
-const addSubmit = document.getElementById('addSubmit');
-const updateSubmit = document.getElementById('updateSubmit');
-const deleteSubmit = document.getElementById('deleteSubmit');
+const searchButton = document.getElementById("searchBtn");
+const sortA2ZButton = document.getElementById("sortA2ZBtn");
+const sortZ2AButton = document.getElementById("sortZ2ABtn");
+const addSubmit = document.getElementById("addSubmit");
+const updateSubmit = document.getElementById("updateSubmit");
+const deleteSubmit = document.getElementById("deleteSubmit");
+const updateMovieId = document.getElementById("upMovieId");
 
-// Add event handlers to call functions below
-searchBtn.addEventListener('click', searchClick);
-sortA2ZBtn.addEventListener('click', a2zClick);
-sortZ2ABtn.addEventListener('click', z2aClick);
-addSubmit.addEventListener('click', addClick);
-updateSubmit.addEventListener('click', updateClick);
-deleteSubmit.addEventListener('click', deleteClick);
+searchButton.addEventListener("click", searchClick);
+sortA2ZButton.addEventListener("click", a2zClick);
+sortZ2AButton.addEventListener("click", z2aClick);
+addSubmit.addEventListener("click", addClick);
+updateSubmit.addEventListener("click", updateClick);
+deleteSubmit.addEventListener("click", deleteClick);
+updateMovieId.addEventListener("change", getUpdateMovieData);
 
-// Searching and sorting
 /**
- * Search for a movie in the movie list by partial title
- * @event Click#searchButton
- * @type {string} 
- * @function searchClick
+ * Reports whether supplied values can form a valid Movie.
+ * @param {number} movieId - The user-supplied movie ID.
+ * @param {string} title - The movie title.
+ * @param {number} year - The release year.
+ * @param {number} rating - The rating from 1 to 5.
+ * @returns {boolean} True when every value is valid.
  */
-function searchClick(){
-  // Get the text element from the DOM
-  let formElements = document.getElementById("form-list-control").elements;
-  // Get text from the form
-  let text = formElements["search-string"].value;
-  // Run the search method.
-  movieList.search(text);
+function movieDetailsAreValid(movieId, title, year, rating) {
+  return Number.isInteger(movieId) && movieId > 0 &&
+    title.trim() !== "" &&
+    Number.isInteger(year) && year > 0 &&
+    Number.isInteger(rating) && rating >= 1 && rating <= 5;
 }
 
-// a to z click - event
-/** 
- * Sort the movieList in ascending order
- * @event Click#a2zButton
- * @function a2zClick
- * */ 
-function a2zClick(){
-  // Run the sort method
+/**
+ * Searches movie titles using the entered partial title.
+ * @returns {void}
+ */
+function searchClick() {
+  const formElements = document.getElementById("form-list-control").elements;
+  const searchText = formElements["search-string"].value.trim();
+  movieList.search(searchText);
+}
+
+/**
+ * Sorts movie titles from A to Z.
+ * @returns {void}
+ */
+function a2zClick() {
   movieList.sortA2Z();
 }
 
-// Z to a Click - event
 /**
- * Sort the movie list in descending order
- * @event Click#z2aButton
- * @function z2aClick
- */ 
-function z2aClick(){
-  // Run the sort method
+ * Sorts movie titles from Z to A.
+ * @returns {void}
+ */
+function z2aClick() {
   movieList.sortZ2A();
 }
 
-// Crud functions
-// C - Create - add new content
-// R - Read - read content or display content
-// U - Update - update content
-// D - Delete - delete content
-// Add click - event
-
-// 
 /**
- * Add a new movie to the list - (Create)
- * The properties are read from the add movie form.
- * @event Click#addMovieSubmitButton
- * @function addClick
- * @property {string} title - the movie title to add
- * @property {number} year - the year the movie was made
+ * Validates and adds a movie entered by the user.
+ * @returns {void}
  */
-function addClick(){
-  // Get the add form elements from the DOM
-  let formElements = document.getElementById("form-add").elements;
-  // Get the movie title from the form
-  let title = formElements["title"].value;
-  // Get the year from the form
-  let year = Number(formElements["year"].value);
-  // Add in validation
-  // We can test our year and title here.
-  // We can add in rules to test our input.
-  console.log(title);
-  console.log(year);
-  const pattern = /^[a-z0-9\s]*$/i
-  const test = pattern.test(title);
-  yearIsInt = Number.isInteger(year);
-  // output of test
-  console.log(test);
-  console.log(yearIsInt);
-  if (test && yearIsInt){
-    // Save the new movie into the list.
-    movieList.add(title, Number(year));
-    // Clear the input fields
-    formElements.title.value = "";
-    formElements.year.value = "";
-    showMessage("Movie Added", "chartreuse", "black");
-  } else if(!test) {
-    // alert("Invalid title, must be alphanumeric with spaces only");
-    showMessage("Invalid title, must be alphanumeric with spaces only", "red", "white");
-  } else {
-    // alert("Invalid year, must be an integer");
-     showMessage("Invalid year, must be an integer", "red", "white");
+function addClick() {
+  const form = document.getElementById("form-add");
+  const movieId = Number(form.elements.movieId.value);
+  const title = form.elements.title.value.trim();
+  const year = Number(form.elements.year.value);
+  const rating = Number(form.elements.rating.value);
+
+  if (!movieDetailsAreValid(movieId, title, year, rating)) {
+    showMessage(
+      "Enter a positive whole-number ID and year, a title, and a rating from 1 to 5.",
+      "red",
+      "white"
+    );
+    return;
   }
+
+  if (!movieList.add(movieId, title, year, rating)) {
+    showMessage("That Movie ID is already in use.", "red", "white");
+    return;
+  }
+
+  form.reset();
+  showMessage("Movie added", "chartreuse", "black");
 }
 
 /**
- * Get movie data from the movie list to update when typing an index in the 
- * index input in the update form
- * @function getData
- * 
+ * Loads a movie into the update form using its Movie ID.
+ * @returns {void}
  */
-function getData(){
-  console.log("get Data");
-  // Get form elements
-  const idValue = document.getElementById('upIndex').value;
-  const upIndex = Number(idValue);
-  console.log(upIndex);
-  const upperBound = movieList.movieList.length;
-  console.log(upperBound);
-  if (upIndex > 0 && upIndex <= upperBound ){
-    const title = document.getElementById('upTitle');
-    const year = document.getElementById('upYear');
-    // search array for the row.
-    const row = movieList.getRow(upIndex - 1);
-    console.log(row);
-    title.value = row.title;
-    year.value = row.year;
-  } else {
-    
-    // alert("No such index exists");
-    showMessage("No such index exists", "DarkOrange", "white");
+function getUpdateMovieData() {
+  const movieId = Number(updateMovieId.value);
+  const movie = movieList.getMovieById(movieId);
+  const form = document.getElementById("form-update");
+
+  if (movie === null) {
+    form.elements.title.value = "";
+    form.elements.year.value = "";
+    form.elements.rating.value = "";
+    showMessage("No movie has that ID.", "DarkOrange", "white");
+    return;
   }
 
+  form.elements.title.value = movie.title;
+  form.elements.year.value = movie.year;
+  form.elements.rating.value = movie.rating;
 }
 
-const upIndex =  document.getElementById('upIndex');
-upIndex.addEventListener('change', getData);
-
 /**
- * update a movie in the movie list - (Update), by index.
- * @event Click#updateMovieSubmitButton
- * @function updateClick
- * @property {number} index - the element in the list to update
- * @property {string} title - the movie title to add
- * @property {number} year - the year the movie was made
+ * Validates and updates a movie selected by Movie ID.
+ * @returns {void}
  */
-function updateClick(){
-  // Get all form child elements from the DOM
-  let formElements = document.getElementById("form-update").elements;
-  // get the values from the input boxes
-  let index = formElements["index"].value - 1;
-  let title = formElements["title"].value;
-  let year = formElements["year"].value;
-  // Add in validation
-  // Add in rules to test our input
-  // Check to see if the index is out of bounds (too big or too small)
-  // Check for year is it a number?
-  // Save the update to the movieList
-  movieList.update(Number(index), title, Number(year));
-  // Clear the input boxes
-  formElements.index.value = "";
-  formElements.title.value = "";
-  formElements.year.value = "";
+function updateClick() {
+  const form = document.getElementById("form-update");
+  const movieId = Number(form.elements.movieId.value);
+  const title = form.elements.title.value.trim();
+  const year = Number(form.elements.year.value);
+  const rating = Number(form.elements.rating.value);
+
+  if (!movieDetailsAreValid(movieId, title, year, rating)) {
+    showMessage("Enter valid details before updating.", "red", "white");
+    return;
+  }
+
+  if (!movieList.update(movieId, title, year, rating)) {
+    showMessage("No movie has that ID.", "DarkOrange", "white");
+    return;
+  }
+
+  form.reset();
   showMessage("Movie updated", "chartreuse", "black");
-
 }
 
 /**
- * Delete a movie in the list - (Delete), by index
- * @event Click#deleteMovieSubmitButton
- * @function deleteClick
- * @property {number} index - the element in the list to update
+ * Confirms and deletes a movie selected by Movie ID.
+ * @returns {void}
  */
+function deleteClick() {
+  const form = document.getElementById("form-delete");
+  const movieId = Number(form.elements.movieId.value);
+  const movie = movieList.getMovieById(movieId);
 
-function deleteClick(){
-  // Get the form element from the DOM
-  let indexElement = document.getElementById("delIndex");
-  // get the value from the element. 
-  // -1 to the value to get the index in the moveList array
-  // Can also test for out of bounds here too.
-  let index = Number(indexElement.value);
-  console.log(index);
-  const upperBound = movieList.movieList.length;
-  console.log(upperBound);
-  if (index > 0 && index <= upperBound ){
-    index = index - 1;
-    // get movie
-    const movie = movieList.getRow(index);
-    // confirm delete
-    const confirm = window.confirm(`Do you want to delete movie "${movie.title}"?`);
-    if (confirm){
-      console.log("Deleting movie... ", movie.title)
-      // Delete the movie from the movieList
-      movieList.delete(Number(index));
-      // clear the input box
-      indexElement.value = "";
-      showMessage("Movie Deleted", "chartreuse", "black");
-    } else {
-      console.log("Delete cancelled");
-      showMessage("Delete cancelled", "DarkOrange", "white");
-    }
-  } else {
-    // alert("No such index exists");
-    showMessage("No such index exists", "DarkOrange", "white");
+  if (movie === null) {
+    showMessage("No movie has that ID.", "DarkOrange", "white");
+    return;
   }
+
+  const shouldDelete = window.confirm(
+    `Do you want to delete movie "${movie.title}"?`
+  );
+
+  if (!shouldDelete) {
+    showMessage("Delete cancelled", "DarkOrange", "white");
+    return;
+  }
+
+  movieList.delete(movieId);
+  form.reset();
+  showMessage("Movie deleted", "chartreuse", "black");
 }
 
-// UI JavaScript
-// JavaScript for Tabs
-// Function openForm()
-// Takes in 2 parameters, and event and an action
-// Returns nothing.
 /**
- * JavaScript function for opening the forms
- * @function openForm
- * @param {object} evt - the event object. 
- * @param {string} action - The name of the action being used
+ * Opens one of the movie-maintenance tabs.
+ * @param {Event} event - The tab button click event.
+ * @param {string} action - The ID of the tab content to display.
+ * @returns {void}
  */
-function openForm(evt, action){
-  // declare variables
-  let i, tabContent, tabLinks;
+function openForm(event, action) {
+  const tabContent = document.getElementsByClassName("tabcontent");
+  const tabLinks = document.getElementsByClassName("tablinks");
 
-  // Get All elements that have the classname of tabcontent.
-  tabContent = document.getElementsByClassName('tabcontent');
-  for(i = 0; i < tabContent.length; i++){
-    // Set display to none for all elements(with tabcontent);
-    tabContent[i].style.display = 'none';
-  }
-  // Get All elements with the class name of tablinks and remove the class of active.
-  tabLinks = document.getElementsByClassName('tablinks');
-  for (i = 0; i < tabLinks.length; i++ ){
-    tabLinks[i].className = tabLinks[i].className.replace("active", "");
+  for (let index = 0; index < tabContent.length; index++) {
+    tabContent[index].style.display = "none";
   }
 
-  // Show the current tab, and add the active class to the button that opened the tab.
+  for (let index = 0; index < tabLinks.length; index++) {
+    tabLinks[index].className = tabLinks[index].className.replace(
+      " active",
+      ""
+    );
+  }
+
   document.getElementById(action).style.display = "block";
-  evt.currentTarget.className += " active";
-} 
-// End of openForm()
-
-// Open a tab by default
-document.getElementById('defaultOpen').click();
-
-// Footer - get date and inject it into the footer
-// get the span to inject the date into
-const dateSpan = document.getElementById("date");
-// Get the current date.
-const theDate = new Date();
-// Add in the date to the DOM.
-dateSpan.textContent = theDate.getFullYear();
-
-// Expand this application
-// Class called Movie - title, year - rating, url (movie page)
-// Sort by year and rating
-// upgrade the UI.
-// search by year, or rating
-
-function showMessage(message, colour, text){
-  const msg = document.getElementById('msg');
-  msg.style.display = "block";
-  msg.textContent = message;
-  msg.style.backgroundColor = colour;
-  msg.style.color = text;
+  event.currentTarget.className += " active";
 }
+
+/**
+ * Displays a feedback message to the user.
+ * @param {string} message - The message to display.
+ * @param {string} colour - The message background colour.
+ * @param {string} textColour - The message text colour.
+ * @returns {void}
+ */
+function showMessage(message, colour, textColour) {
+  const messageBox = document.getElementById("msg");
+
+  messageBox.style.display = "block";
+  messageBox.textContent = message;
+  messageBox.style.backgroundColor = colour;
+  messageBox.style.color = textColour;
+}
+
+document.getElementById("defaultOpen").click();
+document.getElementById("date").textContent = new Date().getFullYear();

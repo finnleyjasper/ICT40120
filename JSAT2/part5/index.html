@@ -38,32 +38,7 @@
       <!-- Movie List Section heading -->
       <h2 class="ml-3">Movie List</h2>
       <!-- Move list start -->
-      <ol class="list" id="list">
-        <li class="row">
-          The Shawshank Redemption (1994)
-        </li>
-        <li class="row">
-          The Godfather (1972)
-        </li>
-        <li class="row">
-          The Godfather: Part II (1974)
-        </li>
-        <li class="row">
-          The Dark Knight (2008)
-        </li>
-        <li class="row">
-          12 Angry Men (1957)
-        </li>
-        <li class="row">
-          Schindler's List (1993)
-        </li>
-        <li class="row">
-          The Lord of the Rings: The Return of the King (2004)
-        </li>
-        <li class="row">
-          Pulp Fiction (1994)
-        </li>
-      </ol>
+      <ol class="list" id="list"></ol>
       <!-- Movie list end -->
     </section>
     <!-- End of Movie list section -->
@@ -86,12 +61,20 @@
       <h2>Add a Movie</h2>
       <form id="form-add">
         <div class="mb-3">
+          <label for="addMovieId">Movie ID: </label>
+          <input type="number" placeholder="Movie ID..." name="movieId" id="addMovieId" min="1">
+        </div>
+        <div class="mb-3">
           <label for="addTitle">Title: </label>
           <input type="text" placeholder="Title..." name="title" id="addTitle">
         </div>
         <div class="mb-3">
           <label for="addYear">Year: </label>
-          <input type="text" placeholder="Year..." name="year" id="addYear">
+          <input type="number" placeholder="Year..." name="year" id="addYear" min="1">
+        </div>
+        <div class="mb-3">
+          <label for="addRating">Rating: </label>
+          <input type="number" placeholder="Rating..." name="rating" id="addRating" min="1" max="5">
         </div>
         <button type="button" name="submit" id="addSubmit">Add Movie</button>
       </form>
@@ -103,8 +86,8 @@
       <h2>Update a Movie</h2>
       <form id="form-update">
         <div class="mb-3">
-          <label for="upIndex">Index: </label>
-          <input type="text" placeholder="Index..." name="index" id="upIndex">
+          <label for="upMovieId">Movie ID: </label>
+          <input type="number" placeholder="Movie ID..." name="movieId" id="upMovieId" min="1">
         </div>
         <div class="mb-3">
           <label for="upTitle">Title: </label>
@@ -112,7 +95,11 @@
         </div>
         <div class="mb-3">
           <label for="upYear">Year: </label>
-          <input type="text" placeholder="Year..." name="year" id="upYear">
+          <input type="number" placeholder="Year..." name="year" id="upYear" min="1">
+        </div>
+        <div class="mb-3">
+          <label for="upRating">Rating: </label>
+          <input type="number" placeholder="Rating..." name="rating" id="upRating" min="1" max="5">
         </div>
         <button type="button" name="submit" id="updateSubmit">Update Movie</button>
       </form>
@@ -124,8 +111,8 @@
       <h2>Delete a Movie</h2>
       <form id="form-delete">
         <div class="mb-3">
-          <label for="delIndex">Index: </label>
-          <input type="text" placeholder="Index..." name="index" id="delIndex">
+          <label for="delMovieId">Movie ID: </label>
+          <input type="number" placeholder="Movie ID..." name="movieId" id="delMovieId" min="1">
         </div>
         <button type="button" name="submit" id="deleteSubmit"> Delete a Movie</button>
       </form>
@@ -147,6 +134,7 @@
   <!-- Load in scripts -->
   <!-- Note: the order of the imports here is important -->
   <!-- Having the movie-list.js first allows the app.js to access the MovieList class defined -->
+  <script src="./js/movie.js"></script>
   <script src="./js/movie-list.js"></script>
   <script src="./js/app.js"></script>
 </body>
