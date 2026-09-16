@@ -22,6 +22,7 @@ const initialMovies = [
  */
 const movieList = new MovieList("list", initialMovies);
 
+// Buttons for the application
 const searchButton = document.getElementById("searchBtn");
 const sortA2ZButton = document.getElementById("sortA2ZBtn");
 const sortZ2AButton = document.getElementById("sortZ2ABtn");
@@ -30,6 +31,7 @@ const updateSubmit = document.getElementById("updateSubmit");
 const deleteSubmit = document.getElementById("deleteSubmit");
 const updateMovieId = document.getElementById("upMovieId");
 
+// Event handlers
 searchButton.addEventListener("click", searchClick);
 sortA2ZButton.addEventListener("click", a2zClick);
 sortZ2AButton.addEventListener("click", z2aClick);
@@ -37,6 +39,8 @@ addSubmit.addEventListener("click", addClick);
 updateSubmit.addEventListener("click", updateClick);
 deleteSubmit.addEventListener("click", deleteClick);
 updateMovieId.addEventListener("change", getUpdateMovieData);
+
+// ==========================
 
 /**
  * Reports whether supplied values can form a valid Movie.
@@ -53,14 +57,20 @@ function movieDetailsAreValid(movieId, title, year, rating) {
     Number.isInteger(rating) && rating >= 1 && rating <= 5;
 }
 
+// ==========================
+
 /**
- * Searches movie titles using the entered partial title.
- * @returns {void}
+ * Search for a movie by partial title
+ * @event Click#searchBtn
+ * @function searchClick
  */
-function searchClick() {
-  const formElements = document.getElementById("form-list-control").elements;
-  const searchText = formElements["search-string"].value.trim();
-  movieList.search(searchText);
+function searchClick(){
+  // Get the text from the DOM
+  let formElements = document.getElementById("form-list-control").elements;
+  // Get the text from the input field
+  let text = formElements["search-string"].value;
+  // Run the search method
+  movieList.search(text);
 }
 
 /**
@@ -81,7 +91,9 @@ function z2aClick() {
 
 /**
  * Validates and adds a movie entered by the user.
- * @returns {void}
+ * @event Click#addSubmit
+ * @function addClick
+ * @description add a new movie to the list
  */
 function addClick() {
   const form = document.getElementById("form-add");
@@ -183,6 +195,8 @@ function deleteClick() {
   showMessage("Movie deleted", "chartreuse", "black");
 }
 
+// UI functions =========================
+
 /**
  * Opens one of the movie-maintenance tabs.
  * @param {Event} event - The tab button click event.
@@ -226,3 +240,36 @@ function showMessage(message, colour, textColour) {
 
 document.getElementById("defaultOpen").click();
 document.getElementById("date").textContent = new Date().getFullYear();
+
+
+/*
+VALIDATION for adding a movie to the list
+
+const pattern = /^[a-z0-9\s]*$/i
+const test = pattern.test(title)
+const yearIsInteger = Number.isInteger(year)
+
+console.log(test)
+console.log(yearIsInteger)
+
+if (test && yearIsInteger) {
+  // Save the movie!
+  movieList.add(movieId, title, year, rating)
+  formElements.title.value = ""
+  formElements.year.value = ""
+  formElements.rating.value = ""
+  showMessage("Movie added", "chartreuse", "black")
+} else if (!test) {
+  showMessage("Enter a valid title - must be alphanumeric with spaces only.", "red", "white")
+} else if (!yearIsInteger) {
+  showMessage("Enter a valid year - must be a whole number.", "red", "white")
+}
+
+
+// ADD IN:
+
+- [documnt element].addEventListener('change', getMovieData) to update the form with the movie details when a movie ID is typed in - klike for update.
+- validaton should happen for update action and add movie action
+- each form should clear after the action is completed
+- comment everythuing super clearly
+*/
