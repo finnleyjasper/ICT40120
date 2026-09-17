@@ -1,10 +1,12 @@
 /**
  * @file app.js
- * @description Creates the movie list and connects it to the application UI.
+ * @description Creates the initial movies, connects buttons to their event
+ * handlers, and manages the forms and feedback messages in the UI.
  */
 
 /**
- * The initial movies displayed by the application.
+ * The initial movies displayed when the page loads. Each entry is an instance
+ * of the Movie class, with an ID, title, release year, and rating.
  * @type {Movie[]}
  */
 const initialMovies = [
@@ -17,33 +19,40 @@ const initialMovies = [
 ];
 
 /**
- * The MovieList instance used by the application.
+ * The MovieList instance used by the application. The "list" argument is the
+ * ID of the HTML element where MovieList displays the movies.
  * @type {MovieList}
  */
 const movieList = new MovieList("list", initialMovies);
 
-// Buttons for the application
+// Get the search, sort, and maintenance buttons from the HTML page by ID.
+// We keep these references so we can attach click handlers below.
 const searchButton = document.getElementById("searchBtn");
 const sortA2ZButton = document.getElementById("sortA2ZBtn");
 const sortZ2AButton = document.getElementById("sortZ2ABtn");
 const addSubmit = document.getElementById("addSubmit");
 const updateSubmit = document.getElementById("updateSubmit");
 const deleteSubmit = document.getElementById("deleteSubmit");
+// This input also needs a change handler to load a movie into the update form.
 const updateMovieId = document.getElementById("upMovieId");
 
-// Event handlers
+// Pass each named function to addEventListener without parentheses. This lets
+// the browser call the function later, when the user clicks the button.
 searchButton.addEventListener("click", searchClick);
 sortA2ZButton.addEventListener("click", a2zClick);
 sortZ2AButton.addEventListener("click", z2aClick);
 addSubmit.addEventListener("click", addClick);
 updateSubmit.addEventListener("click", updateClick);
 deleteSubmit.addEventListener("click", deleteClick);
+// Load the existing movie details when the user changes the update form's ID.
 updateMovieId.addEventListener("change", getUpdateMovieData);
 
 // ==========================
 
 /**
- * Reports whether supplied values can form a valid Movie.
+ * Checks the values entered in the add or update form before saving a movie.
+ * An ID and year must be positive whole numbers, the title must contain text,
+ * and the rating must be a whole number from 1 to 5.
  * @param {number} movieId - The user-supplied movie ID.
  * @param {string} title - The movie title.
  * @param {number} year - The release year.
@@ -51,6 +60,7 @@ updateMovieId.addEventListener("change", getUpdateMovieData);
  * @returns {boolean} True when every value is valid.
  */
 function movieDetailsAreValid(movieId, title, year, rating) {
+  // All conditions must be true for the movie details to be valid.
   return Number.isInteger(movieId) && movieId > 0 &&
     title.trim() !== "" &&
     Number.isInteger(year) && year > 0 &&
@@ -60,157 +70,185 @@ function movieDetailsAreValid(movieId, title, year, rating) {
 // ==========================
 
 /**
- * Search for a movie by partial title
+ * Searches for movies whose titles contain the entered text.
  * @event Click#searchBtn
  * @function searchClick
+ * @returns {void}
  */
 function searchClick(){
-  // Get the text from the DOM
+  // Get the controls inside the search form.
   let formElements = document.getElementById("form-list-control").elements;
-  // Get the text from the input field
+  // Read the text the user typed into the title-search field.
   let text = formElements["search-string"].value;
-  // Run the search method
+  // Ask MovieList to find and display matching movies.
   movieList.search(text);
 }
 
 /**
- * Sorts movie titles from A to Z.
+ * Handles a click on the A-Z button by asking MovieList to sort by title.
  * @returns {void}
  */
 function a2zClick() {
+  // MovieList performs the sort and redraws the list.
   movieList.sortA2Z();
 }
 
 /**
- * Sorts movie titles from Z to A.
+ * Handles a click on the Z-A button by asking MovieList to sort by title.
  * @returns {void}
  */
 function z2aClick() {
+  // MovieList performs the sort and redraws the list.
   movieList.sortZ2A();
 }
 
 /**
- * Validates and adds a movie entered by the user.
+ * Reads the add form, validates the details, and adds a new movie if its ID
+ * has not already been used.
  * @event Click#addSubmit
  * @function addClick
  * @description add a new movie to the list
  */
 function addClick() {
+  // Get the add form and read each of its four input fields.
   const form = document.getElementById("form-add");
+  // Number() converts the text supplied by number inputs to JavaScript numbers.
   const movieId = Number(form.elements.movieId.value);
+  // Remove accidental spaces before and after the title.
   const title = form.elements.title.value.trim();
   const year = Number(form.elements.year.value);
   const rating = Number(form.elements.rating.value);
 
+  // Stop before changing the movie list if any required detail is invalid.
   if (!movieDetailsAreValid(movieId, title, year, rating)) {
     showMessage(
       "Enter a positive whole-number ID and year, a title, and a rating from 1 to 5.",
-      "red",
-      "white"
+      "var(--pink)",
+      "var(--black)"
     );
-    return;
+    return; // Leave the form filled so the user can correct it.
   }
 
+  // add() returns false if another movie already has the entered ID.
   if (!movieList.add(movieId, title, year, rating)) {
-    showMessage("That Movie ID is already in use.", "red", "white");
-    return;
+    showMessage("That Movie ID is already in use.", "var(--pink)", "var(--black)");
+    return; // Do not clear the form when the ID must be changed.
   }
 
+  // The movie was added successfully; clear the form and show confirmation.
   form.reset();
-  showMessage("Movie added", "chartreuse", "black");
+  showMessage("Movie added", "var(--purple)", "var(--white)");
 }
 
 /**
- * Loads a movie into the update form using its Movie ID.
+ * Loads an existing movie's title, year, and rating into the update form when
+ * the user enters its Movie ID.
  * @returns {void}
  */
 function getUpdateMovieData() {
+  // Look up the typed ID in MovieList. An unknown ID returns null.
   const movieId = Number(updateMovieId.value);
   const movie = movieList.getMovieById(movieId);
   const form = document.getElementById("form-update");
 
+  // Clear stale details if the ID does not match an existing movie.
   if (movie === null) {
     form.elements.title.value = "";
     form.elements.year.value = "";
     form.elements.rating.value = "";
-    showMessage("No movie has that ID.", "DarkOrange", "white");
-    return;
+    showMessage("No movie has that ID.", "var(--mauve)", "var(--white)");
+    return; // There is no movie data to copy into the form.
   }
 
+  // Show the current details so the user can edit them before submitting.
   form.elements.title.value = movie.title;
   form.elements.year.value = movie.year;
   form.elements.rating.value = movie.rating;
 }
 
 /**
- * Validates and updates a movie selected by Movie ID.
+ * Reads the update form, validates its values, and updates the movie with the
+ * entered Movie ID. The ID identifies the movie and is not changed.
  * @returns {void}
  */
 function updateClick() {
+  // Read the movie ID and the replacement details from the update form.
   const form = document.getElementById("form-update");
   const movieId = Number(form.elements.movieId.value);
   const title = form.elements.title.value.trim();
   const year = Number(form.elements.year.value);
   const rating = Number(form.elements.rating.value);
 
+  // Do not send invalid values to MovieList.
   if (!movieDetailsAreValid(movieId, title, year, rating)) {
-    showMessage("Enter valid details before updating.", "red", "white");
-    return;
+    showMessage("Enter valid details before updating.", "var(--pink)", "var(--black)");
+    return; // Keep the entered details available for correction.
   }
 
+  // update() returns false when the ID is not present in the movie list.
   if (!movieList.update(movieId, title, year, rating)) {
-    showMessage("No movie has that ID.", "DarkOrange", "white");
+    showMessage("No movie has that ID.", "var(--mauve)", "var(--white)");
     return;
   }
 
+  // A successful update redraws the list; now clear the form and report it.
   form.reset();
-  showMessage("Movie updated", "chartreuse", "black");
+  showMessage("Movie updated", "var(--purple)", "var(--white)");
 }
 
 /**
- * Confirms and deletes a movie selected by Movie ID.
+ * Finds a movie by its ID, asks the user to confirm, and deletes that movie.
  * @returns {void}
  */
 function deleteClick() {
+  // Read the ID from the delete form and retrieve the matching movie.
   const form = document.getElementById("form-delete");
   const movieId = Number(form.elements.movieId.value);
   const movie = movieList.getMovieById(movieId);
 
+  // Do not ask for confirmation when the entered ID does not exist.
   if (movie === null) {
-    showMessage("No movie has that ID.", "DarkOrange", "white");
+    showMessage("No movie has that ID.", "var(--mauve)", "var(--white)");
     return;
   }
 
+  // window.confirm() returns true for OK and false for Cancel.
   const shouldDelete = window.confirm(
     `Do you want to delete movie "${movie.title}"?`
   );
 
+  // Cancel leaves the movie list unchanged.
   if (!shouldDelete) {
-    showMessage("Delete cancelled", "DarkOrange", "white");
+    showMessage("Delete cancelled", "var(--mauve)", "var(--white)");
     return;
   }
 
+  // Remove the movie by ID, then clear the form and show confirmation.
   movieList.delete(movieId);
   form.reset();
-  showMessage("Movie deleted", "chartreuse", "black");
+  showMessage("Movie deleted", "var(--purple)", "var(--white)");
 }
 
-// UI functions =========================
+// UI functions for the maintenance tabs and user feedback.
 
 /**
- * Opens one of the movie-maintenance tabs.
+ * Opens one maintenance tab and hides the others. The HTML tab buttons pass
+ * their click event and the ID of the section to display.
  * @param {Event} event - The tab button click event.
  * @param {string} action - The ID of the tab content to display.
  * @returns {void}
  */
 function openForm(event, action) {
+  // Get every tab panel and every button used to switch panels.
   const tabContent = document.getElementsByClassName("tabcontent");
   const tabLinks = document.getElementsByClassName("tablinks");
 
+  // Hide every tab panel before showing the selected one.
   for (let index = 0; index < tabContent.length; index++) {
     tabContent[index].style.display = "none";
   }
 
+  // Remove the active marker from each tab button.
   for (let index = 0; index < tabLinks.length; index++) {
     tabLinks[index].className = tabLinks[index].className.replace(
       " active",
@@ -218,27 +256,32 @@ function openForm(event, action) {
     );
   }
 
+  // Show the requested panel and mark the button that was clicked as active.
   document.getElementById(action).style.display = "block";
   event.currentTarget.className += " active";
 }
 
 /**
- * Displays a feedback message to the user.
+ * Displays a success, error, or cancellation message in the message box.
  * @param {string} message - The message to display.
  * @param {string} colour - The message background colour.
  * @param {string} textColour - The message text colour.
  * @returns {void}
  */
 function showMessage(message, colour, textColour) {
+  // Find the message area shared by the add, update, and delete forms.
   const messageBox = document.getElementById("msg");
 
+  // Make it visible, set its text, and apply the supplied colours.
   messageBox.style.display = "block";
   messageBox.textContent = message;
   messageBox.style.backgroundColor = colour;
   messageBox.style.color = textColour;
 }
 
+// Open the default maintenance tab when the page first loads.
 document.getElementById("defaultOpen").click();
+// Display the current year in the page footer.
 document.getElementById("date").textContent = new Date().getFullYear();
 
 
@@ -271,5 +314,5 @@ if (test && yearIsInteger) {
 - [documnt element].addEventListener('change', getMovieData) to update the form with the movie details when a movie ID is typed in - klike for update.
 - validaton should happen for update action and add movie action
 - each form should clear after the action is completed
-- comment everythuing super clearly
+- comb through comments
 */
