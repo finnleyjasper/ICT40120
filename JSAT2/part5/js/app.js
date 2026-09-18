@@ -3,18 +3,19 @@
  * @description This file contains the JavaScript for our movie app. It Creates the initial movies, connects buttons to their event handlers, and manages the forms and feedback messages in the UI.
  */
 
+// MOVIES ========================================================================
 /**
  * The initial movies displayed when the page loads. Each entry is an instance
  * of the Movie class, with an ID, title, release year, and rating.
  * @type {Movie[]}
  */
 const initialMovies = [
-  new Movie(101, "The Shawshank Redemption", 1994, 5),
-  new Movie(205, "The Godfather", 1972, 5),
-  new Movie(312, "The Godfather: Part II", 1974, 4),
-  new Movie(418, "The Dark Knight", 2008, 5),
-  new Movie(523, "Krull", 1983, 3),
-  new Movie(634, "The Last Starfighter", 1981, 4)
+  new Movie(101, "Super Amazing Film", 1984, 5),
+  new Movie(205, "Really Terrible Movie", 2005, 2),
+  new Movie(312, "Funny Movie", 2012, 4),
+  new Movie(418, "Just Okay Film", 2008, 3),
+  new Movie(523, "I Can't Believe They Made Another: Really Terrible Movie II", 2009, 1),
+  new Movie(634, "Some Romcom", 2004, 3)
 ];
 
 /**
@@ -24,19 +25,20 @@ const initialMovies = [
  */
 const movieList = new MovieList("list", initialMovies);
 
+// EVENT HANDLERS ========================================================================
+
 // Get the search, sort, and maintenance buttons from the HTML page by ID.
-// We keep these references so we can attach click handlers below.
+// Keep these references so we can attach handlers.
 const searchButton = document.getElementById("searchBtn");
 const sortA2ZButton = document.getElementById("sortA2ZBtn");
 const sortZ2AButton = document.getElementById("sortZ2ABtn");
 const addSubmit = document.getElementById("addSubmit");
 const updateSubmit = document.getElementById("updateSubmit");
 const deleteSubmit = document.getElementById("deleteSubmit");
-// This input also needs a change handler to load a movie into the update form.
+// This input will use a change handler rather than click.
 const updateMovieId = document.getElementById("upMovieId");
 
-// Pass each named function to addEventListener without parentheses. This lets
-// the browser call the function later, when the user clicks the button.
+// Pass each button's relevant function to addEventListener.
 searchButton.addEventListener("click", searchClick);
 sortA2ZButton.addEventListener("click", a2zClick);
 sortZ2AButton.addEventListener("click", z2aClick);
@@ -46,7 +48,7 @@ deleteSubmit.addEventListener("click", deleteClick);
 // Load the existing movie details when the user changes the update form's ID.
 updateMovieId.addEventListener("change", getUpdateMovieData);
 
-// ==========================
+// VALIDATION =========================================================================
 
 /**
  * Checks the values entered in the add or update form before saving a movie.
@@ -60,6 +62,9 @@ updateMovieId.addEventListener("change", getUpdateMovieData);
  */
 function movieDetailsAreValid(movieId, title, year, rating) {
   // All conditions must be true for the movie details to be valid.
+  // const pattern = /^[a-z0-9\s]*$/i
+
+
   return Number.isInteger(movieId) && movieId > 0 &&
     title.trim() !== "" &&
     Number.isInteger(year) && year > 0 &&
@@ -314,4 +319,6 @@ if (test && yearIsInteger) {
 - validaton should happen for update action and add movie action
 - each form should clear after the action is completed
 - comb through comments
+
+- 4 tests for part 1
 */
