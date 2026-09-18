@@ -32,6 +32,10 @@ const movieList = new MovieList("list", initialMovies);
 const searchButton = document.getElementById("searchBtn");
 const sortA2ZButton = document.getElementById("sortA2ZBtn");
 const sortZ2AButton = document.getElementById("sortZ2ABtn");
+const sortRatingButton = document.getElementById("sortRatingBtn");
+const refreshButton = document.getElementById("refreshBtn");
+const searchByIdButton = document.getElementById("searchByIdBtn");
+const searchByTitleButton = document.getElementById("searchByTitleBtn");
 const addSubmit = document.getElementById("addSubmit");
 const updateSubmit = document.getElementById("updateSubmit");
 const deleteSubmit = document.getElementById("deleteSubmit");
@@ -42,6 +46,10 @@ const updateMovieId = document.getElementById("upMovieId");
 searchButton.addEventListener("click", searchClick);
 sortA2ZButton.addEventListener("click", a2zClick);
 sortZ2AButton.addEventListener("click", z2aClick);
+sortRatingButton.addEventListener("click", ratingClick);
+refreshButton.addEventListener("click", refreshClick);
+searchByIdButton.addEventListener("click", selectIdSearch);
+searchByTitleButton.addEventListener("click", selectTitleSearch);
 addSubmit.addEventListener("click", addClick);
 updateSubmit.addEventListener("click", updateClick);
 deleteSubmit.addEventListener("click", deleteClick);
@@ -73,8 +81,36 @@ function movieDetailsAreValid(movieId, title, year, rating) {
 
 // ==========================
 
+let searchMode = "id";
+
 /**
- * Searches for movies whose titles contain the entered text.
+ * Selects ID search and updates the search form's visible label.
+ * @returns {void}
+ */
+function selectIdSearch() {
+  searchMode = "id";
+  document.getElementById("searchLabel").textContent = "Movie ID:";
+  searchByIdButton.classList.add("active");
+  searchByTitleButton.classList.remove("active");
+  searchByIdButton.setAttribute("aria-pressed", "true");
+  searchByTitleButton.setAttribute("aria-pressed", "false");
+}
+
+/**
+ * Selects title search and updates the search form's visible label.
+ * @returns {void}
+ */
+function selectTitleSearch() {
+  searchMode = "title";
+  document.getElementById("searchLabel").textContent = "Title:";
+  searchByTitleButton.classList.add("active");
+  searchByIdButton.classList.remove("active");
+  searchByTitleButton.setAttribute("aria-pressed", "true");
+  searchByIdButton.setAttribute("aria-pressed", "false");
+}
+
+/**
+ * Searches for a movie by ID or for movies containing a partial title.
  * @event Click#searchBtn
  * @function searchClick
  * @returns {void}
@@ -84,8 +120,13 @@ function searchClick(){
   let formElements = document.getElementById("form-list-control").elements;
   // Read the text the user typed into the title-search field.
   let text = formElements["search-string"].value;
-  // Ask MovieList to find and display matching movies.
-  movieList.search(text);
+  if (searchMode === "id") {
+    const movie = movieList.getMovieById(Number(text));
+    movieList.genMovieSearchList(movie === null ? [] : [movie]);
+  } else {
+    // Ask MovieList to find and display matching titles.
+    movieList.search(text);
+  }
 }
 
 /**
@@ -104,6 +145,23 @@ function a2zClick() {
 function z2aClick() {
   // MovieList performs the sort and redraws the list.
   movieList.sortZ2A();
+}
+
+/**
+ * Shows movies in order from highest to lowest rating.
+ * @returns {void}
+ */
+function ratingClick() {
+  movieList.sortByRating();
+}
+
+/**
+ * Clears the search input and restores the full movie list.
+ * @returns {void}
+ */
+function refreshClick() {
+  document.getElementById("searchInput").value = "";
+  movieList.refresh();
 }
 
 /**
@@ -160,7 +218,7 @@ function getUpdateMovieData() {
     form.elements.title.value = "";
     form.elements.year.value = "";
     form.elements.rating.value = "";
-    showMessage("No movie has that ID.", "var(--mauve)", "var(--white)");
+    showMessage("No movie has that ID.", "var(--purple)", "var(--white)");
     return; // There is no movie data to copy into the form.
   }
 
@@ -191,7 +249,7 @@ function updateClick() {
 
   // update() returns false when the ID is not present in the movie list.
   if (!movieList.update(movieId, title, year, rating)) {
-    showMessage("No movie has that ID.", "var(--mauve)", "var(--white)");
+    showMessage("No movie has that ID.", "var(--purple)", "var(--white)");
     return;
   }
 
@@ -212,7 +270,7 @@ function deleteClick() {
 
   // Do not ask for confirmation when the entered ID does not exist.
   if (movie === null) {
-    showMessage("No movie has that ID.", "var(--mauve)", "var(--white)");
+    showMessage("No movie has that ID.", "var(--purple)", "var(--white)");
     return;
   }
 
@@ -223,7 +281,7 @@ function deleteClick() {
 
   // Cancel leaves the movie list unchanged.
   if (!shouldDelete) {
-    showMessage("Delete cancelled", "var(--mauve)", "var(--white)");
+    showMessage("Delete cancelled", "var(--purple)", "var(--white)");
     return;
   }
 
@@ -287,38 +345,3 @@ function showMessage(message, colour, textColour) {
 document.getElementById("defaultOpen").click();
 // Display the current year in the page footer.
 document.getElementById("date").textContent = new Date().getFullYear();
-
-
-/*
-VALIDATION for adding a movie to the list
-
-const pattern = /^[a-z0-9\s]*$/i
-const test = pattern.test(title)
-const yearIsInteger = Number.isInteger(year)
-
-console.log(test)
-console.log(yearIsInteger)
-
-if (test && yearIsInteger) {
-  // Save the movie!
-  movieList.add(movieId, title, year, rating)
-  formElements.title.value = ""
-  formElements.year.value = ""
-  formElements.rating.value = ""
-  showMessage("Movie added", "chartreuse", "black")
-} else if (!test) {
-  showMessage("Enter a valid title - must be alphanumeric with spaces only.", "red", "white")
-} else if (!yearIsInteger) {
-  showMessage("Enter a valid year - must be a whole number.", "red", "white")
-}
-
-
-// ADD IN:
-
-- [documnt element].addEventListener('change', getMovieData) to update the form with the movie details when a movie ID is typed in - klike for update.
-- validaton should happen for update action and add movie action
-- each form should clear after the action is completed
-- comb through comments
-
-- 4 tests for part 1
-*/

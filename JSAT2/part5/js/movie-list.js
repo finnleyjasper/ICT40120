@@ -35,12 +35,17 @@ class MovieList {
     // Find the list element in index.html and create a new list item for it.
     const rootElement = document.getElementById(this.rootId);
     const row = document.createElement("li");
+    const details = document.createElement("div");
 
     // Apply the row class.
     row.classList.add("row");
-    row.textContent =
-      `ID: ${movie.movieId} | ${movie.title} (${movie.year}) | ` +
-      `Rating: ${movie.rating}/5`;
+    details.classList.add("movie-details");
+    for (const value of [movie.movieId, movie.title, movie.year, `${movie.rating}/5`]) {
+      const cell = document.createElement("span");
+      cell.textContent = value;
+      details.appendChild(cell);
+    }
+    row.appendChild(details);
     // Add the completed item to the visible movie list.
     rootElement.appendChild(row);
   }
@@ -72,6 +77,12 @@ class MovieList {
     for (let index = 0; index < list.length; index++) {
       this.movieRow(list[index]);
     }
+
+    if (list.length === 0) {
+      const row = document.createElement("li");
+      row.textContent = "0 results";
+      document.getElementById(this.rootId).appendChild(row);
+    }
   }
 
   /**
@@ -81,16 +92,8 @@ class MovieList {
    */
   removeElements() {
     const rootElement = document.getElementById(this.rootId);
-    const childNodes = document.getElementsByClassName('row');
-    const len = childNodes.length - 1;
-
-    // Loop through the list backwards.
-    for(let i = len; i >=0; i--){
-      // Pull out the list child.
-      const child = childNodes[i];
-      // Remove this child from the DOM.
-      rootElement.removeChild(child);
-    }
+    // Remove all visible rows, including a possible "0 results" message.
+    rootElement.replaceChildren();
   }
 
   // FINDING A MOVIE ===============================================================
@@ -228,6 +231,17 @@ class MovieList {
       return b.title.localeCompare(a.title);
     });
     // Show the movies in their new order.
+    this.refresh();
+  }
+
+  /**
+   * Sorts movies from highest to lowest rating and displays the result.
+   * @returns {void}
+   */
+  sortByRating() {
+    this.movieList.sort(function(a, b) {
+      return b.rating - a.rating;
+    });
     this.refresh();
   }
 

@@ -3,200 +3,265 @@
 :root {
   --white: #ffffff;
   --black: #000000;
-  --purple: #2C0066;
-  --pink: #FF9CCD;
-  --mauve: #99BCFF;
+  --purple: #2c0066;
+  --pink: #ff9ccd;
+  --blue: #99bcff;
 }
 
-/* CSS Reset */
 * {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
 }
 
-/* Body Style */
 body {
-  font-family: "Inria Sans", sans-serif;
+  margin: 0;
+  background: var(--white);
   color: var(--black);
-  background-color: var(--white);
+  font-family: "Inria Sans", sans-serif;
 }
 
-/* Heading Styles */
-h1 {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  color: var(--purple);
-  padding: 1.2rem 0;
-  text-align: center;
-  border: 6px var(--purple) double;
-  font-size: 2.5rem;
-}
-
-h2 {
-  margin-bottom: 0.5rem;
-  color: var(--purple);
-}
-
-/* Utility Styles */
-.container{
-  max-width: 900px;
+.container {
+  width: min(96%, 1500px);
   margin: 0 auto;
 }
 
-.mb-3 {
-  margin-bottom: 1rem;
-  /*  16px based on the body tag, font-size*/
+h1 {
+  margin: 0 0 22px;
+  color: var(--purple);
+  font-size: clamp(3rem, 6vw, 6rem);
+  line-height: 1.15;
+  text-align: center;
+  text-transform: uppercase;
 }
 
-.ml-3 {
-  margin-left: 1rem;
+h2 {
+  margin: 0;
+  font-weight: 400;
+  text-transform: uppercase;
 }
 
-.mr-3 {
-  margin-right: 1rem;
-}
-
+button,
 input {
-  padding: 0.5rem 1rem;
   font: inherit;
-  color: var(--black);
-  background-color: var(--white);
-  border: 2px solid var(--mauve);
 }
 
-button{
-  font-family: inherit;
-  font-size: 20px;
+button {
   cursor: pointer;
-  padding: 0.8rem 1.2rem;
-  background-color: var(--purple);
-  color: var(--white);
-  border: 4px solid var(--purple);
-}
-
-button:hover{
-  background-color: var(--pink);
-  color: var(--black);
-  border-color: var(--purple);
 }
 
 button:focus-visible,
 input:focus-visible {
-  outline: 3px solid var(--pink);
+  outline: 3px solid var(--purple);
   outline-offset: 2px;
 }
 
-.search-sort {
-  border: 6px var(--mauve) double;
-  margin-bottom: 1rem;
+.top-grid {
+  display: grid;
+  grid-template-columns: 2.7fr 1fr;
+  gap: 10px;
 }
 
-.search-sort h2 {
-  margin-left: 1.5rem;
+.movie-panel h2,
+.sort-panel h2 {
+  min-height: 86px;
+  display: grid;
+  place-items: center;
+  background: var(--purple);
+  color: var(--white);
+  font-size: 2.6rem;
 }
 
-.search-sort form {
-  margin-left: 1.5rem;
-}
-/* List Styles */
-#mList {
-  border: 6px var(--purple) double;
-}
-
-ol {
-  margin-left: 1.5rem;
-  border: 2px solid var(--mauve);
-  margin-bottom: 1.5rem;
-  margin-right: 1.5rem;
+.sort-panel h2 {
+  font-size: 2rem;
 }
 
 .list {
-  margin-top: 0.5rem;
+  height: 345px;
+  margin: 6px 0 0;
+  padding: 12px 25px 12px 70px;
+  overflow-y: auto;
+  border: 6px solid var(--blue);
+  background: var(--white);
+  font-size: 1.6rem;
 }
 
 .list .row {
-  padding: 5px 15px;
-  cursor: pointer;
+  padding: 5px 0;
 }
 
-.list .row:nth-child(odd){
-  background-color: var(--white);
+.movie-details {
+  display: grid;
+  grid-template-columns: 0.8fr 2.2fr 0.9fr 0.9fr;
+  gap: 12px;
+  align-items: start;
 }
 
-.list .row:hover{
-  background-color: var(--pink);
+.movie-details span {
+  overflow-wrap: anywhere;
+}
+
+.sort-buttons {
+  height: 190px;
+  margin-top: 6px;
+  padding: 0 12px;
+  display: grid;
+  background: var(--blue);
+}
+
+.sort-buttons button {
+  border: 0;
+  border-bottom: 3px solid var(--white);
+  background: transparent;
   color: var(--black);
+  font-size: 1.8rem;
+  text-transform: uppercase;
 }
 
-
-/* Tab Styles - tablinks */
-.tab {
-  margin-top: 1rem;
-  overflow: hidden;
-  border: 2px solid var(--black);
+.sort-buttons button:last-child {
+  border-bottom: 0;
 }
 
-.tab button {
-  float: left;
-  border: none;
-  outline: none;
-  padding: 1rem 1.2rem;
-  transition: 0.3s;
+.sort-buttons button:hover {
+  background: var(--white);
+}
+
+.refresh-button {
+  width: 100%;
+  height: 149px;
+  margin-top: 6px;
+  border: 0;
+  background: var(--pink);
+  color: var(--purple);
+  font-size: 2.2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.refresh-button:hover,
+.submit-button:hover {
+  background: var(--blue);
+}
+
+.msgBox {
+  display: none;
+  margin: 10px 0;
+  padding: 10px;
+  text-align: center;
+}
+
+.bottom-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.panel-tabs {
+  height: 96px;
+  display: grid;
+  align-items: stretch;
+  background: var(--purple);
   color: var(--white);
 }
 
-.tab button.active{
-  background-color: var(--pink);
-  color: var(--black);
-  font-weight: 700;
+.search-tabs {
+  grid-template-columns: 1.35fr 0.9fr 0.9fr;
+}
+
+.search-tabs h2 {
+  align-self: center;
+  padding-left: 20px;
+  font-size: 2rem;
+}
+
+.panel-tabs button {
+  margin: 16px 0;
+  border: 0;
+  border-left: 2px solid var(--white);
+  background: transparent;
+  color: var(--white);
+  font-size: 2rem;
+  text-transform: uppercase;
+}
+
+.panel-tabs button:hover,
+.panel-tabs button.active {
+  color: var(--pink);
+}
+
+.tab {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.tab button:first-child {
+  border-left: 0;
+}
+
+.panel-body {
+  height: 350px;
+  margin-top: 0;
+  padding: 25px 18px;
+  border: 6px solid var(--blue);
+  border-top: 0;
+  background: var(--white);
 }
 
 .tabcontent {
   display: none;
-  padding: 1rem 1.5rem;
-  border: 2px solid var(--mauve);
-  border-top: none;
 }
 
-.tabcontent h2{
-  margin-top: 0;
+.search-form,
+.maintenance-form {
   text-align: center;
 }
 
-.tabcontent label{
-  display: inline-block;
-  width: 6%;
+.search-form {
+  padding-top: 90px;
 }
 
-.tabcontent input{
-  display: inline-block;
-  width: 93%;
+.field-row {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 14px;
+  text-align: left;
 }
 
-.tabcontent button{
+.field-row label {
+  font-size: 1.55rem;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.field-row input {
   width: 100%;
+  height: 44px;
+  padding: 6px 10px;
+  border: 2px solid #e6e6e6;
+  border-radius: 9px;
+  background: var(--white);
+  color: var(--black);
+  font-size: 1.4rem;
 }
 
-/* Footer Styles*/
-footer {
-  margin-top: 2rem;
-  border: 6px var(--purple) double;
+.submit-button {
+  min-width: 250px;
+  margin-top: 4px;
+  padding: 13px 25px;
+  border: 0;
+  background: var(--pink);
   color: var(--purple);
-  padding: 2rem;
+  font-size: 1.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.search-form .submit-button {
+  margin-top: 64px;
+}
+
+footer {
+  margin: 22px 0;
+  color: var(--purple);
   text-align: right;
-  font-size: 1.5rem;
-}
-
-footer p {
-  padding-right: 0.5rem;
-}
-
-.msgBox {
-  margin-top: 1rem;
-  border: 2px solid var(--mauve);
-  padding: 1rem;
-  text-align: center;
-  font-size: 1.5rem;
-  display: none;
 }
