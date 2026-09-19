@@ -117,7 +117,7 @@ input:focus-visible {
 }
 
 .list .row:hover {
-  background: var(--blue);
+  color: var(--pink);
 }
 
 .movie-details {
@@ -170,9 +170,14 @@ input:focus-visible {
   text-transform: uppercase;
 }
 
-.refresh-button:hover,
 .submit-button:hover {
   background: var(--blue);
+}
+
+.refresh-button:hover {
+  background: var(--purple);
+  color: var(--white);
+  font-weight: 700;
 }
 
 .msgBox {
