@@ -246,6 +246,17 @@ class MovieList {
   }
 
   /**
+   * Restores the default order by sorting Movie IDs from lowest to highest.
+   * @returns {void}
+   */
+  sortById() {
+    this.movieList.sort(function(a, b) {
+      return a.movieId - b.movieId;
+    });
+    this.refresh();
+  }
+
+  /**
    * Finds movies whose titles contain the supplied text, ignoring letter case,
    * and displays all matches without changing the stored array.
    * @param {string} nameString - The partial title to search for.

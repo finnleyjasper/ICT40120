@@ -20,14 +20,14 @@ body {
 }
 
 .container {
-  width: min(96%, 1500px);
-  margin: 0 auto;
+  width: min(90%, 1000px);
+  margin: 24px auto 38px;
 }
 
 h1 {
-  margin: 0 0 22px;
+  margin: 0 0 24px;
   color: var(--purple);
-  font-size: clamp(3rem, 6vw, 6rem);
+  font-size: clamp(2.2rem, 4vw, 4rem);
   line-height: 1.15;
   text-align: center;
   text-transform: uppercase;
@@ -57,40 +57,72 @@ input:focus-visible {
 .top-grid {
   display: grid;
   grid-template-columns: 2.7fr 1fr;
-  gap: 10px;
+  gap: 12px;
 }
 
 .movie-panel h2,
 .sort-panel h2 {
-  min-height: 86px;
+  min-height: 58px;
   display: grid;
   place-items: center;
   background: var(--purple);
   color: var(--white);
-  font-size: 2.6rem;
+  font-size: 1.8rem;
 }
 
 .sort-panel h2 {
-  font-size: 2rem;
+  font-size: 1.35rem;
 }
 
 .list {
-  height: 345px;
-  margin: 6px 0 0;
-  padding: 12px 25px 12px 70px;
+  height: 200px;
+  margin: 0;
+  padding: 8px 12px;
   overflow-y: auto;
-  border: 6px solid var(--blue);
+  border: 4px solid var(--blue);
   background: var(--white);
-  font-size: 1.6rem;
+  font-size: 1.1rem;
+  list-style: none;
+  counter-reset: movie-row;
+}
+
+.movie-list-header {
+  height: 34px;
+  padding: 5px 20px;
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  align-items: center;
+  border: 4px solid var(--blue);
+  border-bottom: 0;
+  background: var(--blue);
+  color: var(--purple);
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
 .list .row {
-  padding: 5px 0;
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  align-items: center;
+  min-height: 32px;
+  padding: 3px 8px;
+  border-bottom: 1px solid #e6e6e6;
+  counter-increment: movie-row;
+}
+
+.list .row::before {
+  content: counter(movie-row) ".";
+  font-weight: 700;
+}
+
+.list .row:hover {
+  background: var(--blue);
 }
 
 .movie-details {
   display: grid;
-  grid-template-columns: 0.8fr 2.2fr 0.9fr 0.9fr;
+  grid-template-columns: 70px minmax(180px, 1fr) 70px 70px;
   gap: 12px;
   align-items: start;
 }
@@ -100,19 +132,19 @@ input:focus-visible {
 }
 
 .sort-buttons {
-  height: 190px;
-  margin-top: 6px;
-  padding: 0 12px;
+  height: 127px;
+  margin-top: 4px;
+  padding: 0 8px;
   display: grid;
   background: var(--blue);
 }
 
 .sort-buttons button {
   border: 0;
-  border-bottom: 3px solid var(--white);
+  border-bottom: 2px solid var(--white);
   background: transparent;
   color: var(--black);
-  font-size: 1.8rem;
+  font-size: 1.25rem;
   text-transform: uppercase;
 }
 
@@ -120,18 +152,20 @@ input:focus-visible {
   border-bottom: 0;
 }
 
-.sort-buttons button:hover {
-  background: var(--white);
+.sort-buttons button:hover,
+.sort-buttons button.active {
+  font-weight: 700;
+  text-decoration: underline;
 }
 
 .refresh-button {
   width: 100%;
-  height: 149px;
-  margin-top: 6px;
+  height: 100px;
+  margin-top: 4px;
   border: 0;
   background: var(--pink);
   color: var(--purple);
-  font-size: 2.2rem;
+  font-size: 1.5rem;
   font-weight: 700;
   text-transform: uppercase;
 }
@@ -143,8 +177,8 @@ input:focus-visible {
 
 .msgBox {
   display: none;
-  margin: 10px 0;
-  padding: 10px;
+  margin: 7px 0;
+  padding: 7px;
   text-align: center;
 }
 
@@ -152,11 +186,11 @@ input:focus-visible {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
-  margin-top: 16px;
+  margin-top: 19px;
 }
 
 .panel-tabs {
-  height: 96px;
+  height: 64px;
   display: grid;
   align-items: stretch;
   background: var(--purple);
@@ -169,23 +203,25 @@ input:focus-visible {
 
 .search-tabs h2 {
   align-self: center;
-  padding-left: 20px;
-  font-size: 2rem;
+  padding-left: 13px;
+  font-size: 1.35rem;
 }
 
 .panel-tabs button {
-  margin: 16px 0;
+  margin: 11px 0;
   border: 0;
   border-left: 2px solid var(--white);
   background: transparent;
   color: var(--white);
-  font-size: 2rem;
+  font-size: 1.35rem;
   text-transform: uppercase;
 }
 
 .panel-tabs button:hover,
 .panel-tabs button.active {
-  color: var(--pink);
+  color: var(--blue);
+  font-weight: 700;
+  text-decoration: underline;
 }
 
 .tab {
@@ -197,10 +233,10 @@ input:focus-visible {
 }
 
 .panel-body {
-  height: 350px;
+  height: 250px;
   margin-top: 0;
-  padding: 25px 18px;
-  border: 6px solid var(--blue);
+  padding: 17px 12px;
+  border: 4px solid var(--blue);
   border-top: 0;
   background: var(--white);
 }
@@ -214,54 +250,56 @@ input:focus-visible {
   text-align: center;
 }
 
-.search-form {
-  padding-top: 90px;
+.search-form,
+#Delete {
+  padding-top: 60px;
 }
 
 .field-row {
   display: grid;
-  grid-template-columns: 150px 1fr;
-  gap: 12px;
+  grid-template-columns: 100px 1fr;
+  gap: 8px;
   align-items: center;
-  margin-bottom: 14px;
+  margin-bottom: 9px;
   text-align: left;
 }
 
 .field-row label {
-  font-size: 1.55rem;
+  font-size: 1.05rem;
   text-transform: uppercase;
   white-space: nowrap;
 }
 
 .field-row input {
   width: 100%;
-  height: 44px;
-  padding: 6px 10px;
+  height: 30px;
+  padding: 4px 7px;
   border: 2px solid #e6e6e6;
-  border-radius: 9px;
+  border-radius: 6px;
   background: var(--white);
   color: var(--black);
-  font-size: 1.4rem;
+  font-size: 1rem;
 }
 
 .submit-button {
-  min-width: 250px;
-  margin-top: 4px;
-  padding: 13px 25px;
+  min-width: 167px;
+  margin-top: 3px;
+  padding: 9px 17px;
   border: 0;
   background: var(--pink);
   color: var(--purple);
-  font-size: 1.9rem;
+  font-size: 1.3rem;
   font-weight: 700;
   text-transform: uppercase;
 }
 
-.search-form .submit-button {
-  margin-top: 64px;
+.search-form .submit-button,
+#Delete .submit-button {
+  margin-top: 43px;
 }
 
 footer {
-  margin: 22px 0;
+  margin: 20px 0 0;
   color: var(--purple);
   text-align: right;
 }

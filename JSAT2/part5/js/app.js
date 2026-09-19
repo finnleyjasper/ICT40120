@@ -130,12 +130,25 @@ function searchClick(){
 }
 
 /**
+ * Marks the selected sort button, or clears the selection for default ID order.
+ * @param {HTMLButtonElement|null} selectedButton - The selected button, or null.
+ * @returns {void}
+ */
+function selectSortButton(selectedButton) {
+  for (const button of [sortA2ZButton, sortZ2AButton, sortRatingButton]) {
+    button.classList.toggle("active", button === selectedButton);
+    button.setAttribute("aria-pressed", String(button === selectedButton));
+  }
+}
+
+/**
  * Handles a click on the A-Z button by asking MovieList to sort by title.
  * @returns {void}
  */
 function a2zClick() {
   // MovieList performs the sort and redraws the list.
   movieList.sortA2Z();
+  selectSortButton(sortA2ZButton);
 }
 
 /**
@@ -145,6 +158,7 @@ function a2zClick() {
 function z2aClick() {
   // MovieList performs the sort and redraws the list.
   movieList.sortZ2A();
+  selectSortButton(sortZ2AButton);
 }
 
 /**
@@ -153,15 +167,17 @@ function z2aClick() {
  */
 function ratingClick() {
   movieList.sortByRating();
+  selectSortButton(sortRatingButton);
 }
 
 /**
- * Clears the search input and restores the full movie list.
+ * Clears the search input and restores the full list in default Movie ID order.
  * @returns {void}
  */
 function refreshClick() {
   document.getElementById("searchInput").value = "";
-  movieList.refresh();
+  movieList.sortById();
+  selectSortButton(null);
 }
 
 /**

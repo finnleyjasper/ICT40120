@@ -13,15 +13,24 @@
     <div class="top-grid">
       <section class="movie-panel" aria-labelledby="movie-list-heading">
         <h2 id="movie-list-heading">Movie List</h2>
+        <div class="movie-list-header" aria-hidden="true">
+          <span>#</span>
+          <div class="movie-details">
+            <span>ID</span>
+            <span>Title</span>
+            <span>Year</span>
+            <span>Rating</span>
+          </div>
+        </div>
         <ol class="list" id="list"></ol>
       </section>
 
       <section class="sort-panel" aria-labelledby="sort-heading">
         <h2 id="sort-heading">Sort by:</h2>
         <div class="sort-buttons">
-          <button type="button" id="sortA2ZBtn">A-Z</button>
-          <button type="button" id="sortZ2ABtn">Z-A</button>
-          <button type="button" id="sortRatingBtn">Rating</button>
+          <button type="button" id="sortA2ZBtn" aria-pressed="false">A-Z</button>
+          <button type="button" id="sortZ2ABtn" aria-pressed="false">Z-A</button>
+          <button type="button" id="sortRatingBtn" aria-pressed="false">Rating</button>
         </div>
         <button type="button" id="refreshBtn" class="refresh-button">Refresh</button>
       </section>
