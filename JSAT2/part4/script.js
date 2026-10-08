@@ -71,14 +71,14 @@ function sortMoviesById() {
 }
 
 /**
- * Searches a sorted array for a target value using binary search (exact same code as in part 1)
+ * Searches a sorted array for a target value using binary search
  * @param {Movie[]} array - The sorted movie array to search.
  * @param {number} key - The target value to find.
- * @returns {number} The target value's index, or -1 if it is not found.
+ * @returns {Movie|null} The matching Movie object, or null if it is not found.
  */
 function binarySearch(array, key) {
-    // Not found by default
-    let found = -1;
+    // No matching movie has been found yet
+    let found = null;
 
     // Create the start and end points
     let start = 0;
@@ -90,7 +90,7 @@ function binarySearch(array, key) {
 
         // Test if the mid point is what we are looking for
         if (array[mid].movieId === key) {
-            found = mid;
+            found = array[mid];
             break;
         } else if (array[mid].movieId < key) {
             // Search right half of array
@@ -100,13 +100,13 @@ function binarySearch(array, key) {
             end = mid - 1;
         }
     }
-    // Return the index of the found element or -1 if not found
+    // Return the matching Movie object, or null if no match was found
     return found;
 }
 
 /**
  * Finds the movie at index 1 in the array. Assumes createMovieArray has been called.
- * @returns {number} The index of the movie that was found.
+ * @returns {Movie|null} The matching Movie object, or null if not found.
  */
 function findExistingMovie() {
 
@@ -116,19 +116,19 @@ function findExistingMovie() {
     // Binary search requires the array to be sorted first.
     sortMoviesById();
 
-    const foundIndex = binarySearch(movies, movieIDToFind);
-    console.log("Movie found at index:", foundIndex);
-    return foundIndex;
+    const foundMovie = binarySearch(movies, movieIDToFind);
+    console.log("Movie object returned:", foundMovie);
+    return foundMovie;
 }
 
 /**
  * Searches for the invalid ID -500 to demonstrate a not-found result.
- * @returns {number} -1 because no movie has this ID.
+ * @returns {null} Null because no movie has this ID.
  */
 function findMissingMovie() {
-    const foundIndex = binarySearch(movies, -500);
-    console.log("Movie at index -500 not found; result is:", foundIndex);
-    return foundIndex;
+    const foundMovie = binarySearch(movies, -500);
+    console.log("Movie with ID -500 not found; result is:", foundMovie);
+    return foundMovie;
 }
 
 // Run the createMovieArray function when the button is clicked
