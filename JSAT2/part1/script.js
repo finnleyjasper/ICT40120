@@ -31,15 +31,15 @@ function runArrayTasks() {
      * @returns {number} The target value's index, or -1 if it is not found.
      */
     function sequentialSearch(array, value) {
-      // While the index is less than the length, search for the value
-      for (let index = 0; index < array.length; index++) {
-        // If the element at the current index is equal to the value, return the index
-        if (array[index] === value) {
-          return index;
+        // While the index is less than the length, search for the value
+        for (let index = 0; index < array.length; index++) {
+            // If the element at the current index is equal to the value, return the index
+            if (array[index] === value) {
+            return index;
+            }
         }
-      }
-      // If the value is not found, return -1
-      return -1;
+        // Return -1 and a message if not found
+        return "Element '" + value + "' not found in the array. Result is -1";
     }
 
     console.log("The index of 25 is:", sequentialSearch(numbers, 25));
@@ -75,7 +75,10 @@ function runArrayTasks() {
                 end = mid - 1;
             }
         }
-        // Return the index of the found element or -1 if not found
+        // Return the index of the found element or -1 and a message if not found
+        if (found === -1) {
+            return "Element '" + key + "' not found in the array. Result is " + found;
+        }
         return found;
     }
 
