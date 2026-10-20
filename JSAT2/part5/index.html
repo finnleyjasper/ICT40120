@@ -8,9 +8,13 @@
 </head>
 <body>
   <main class="container">
+    <!-- Page title -->
     <h1>Movie Management</h1>
 
+    <!-- ========== Top Grid containing movie list and sort controls. ========== -->
     <div class="top-grid">
+
+      <!-- ----- Start Movie List ----- -->
       <section class="movie-panel" aria-labelledby="movie-list-heading">
         <h2 id="movie-list-heading">Movie List</h2>
         <div class="movie-list-header" aria-hidden="true">
@@ -24,7 +28,9 @@
         </div>
         <ol class="list" id="list"></ol>
       </section>
+      <!-- ----- End Movie List ----- -->
 
+      <!-- ----- Start Sort Controls ----- -->
       <section class="sort-panel" aria-labelledby="sort-heading">
         <h2 id="sort-heading">Sort by:</h2>
         <div class="sort-buttons">
@@ -34,17 +40,28 @@
         </div>
         <button type="button" id="refreshBtn" class="refresh-button">Refresh</button>
       </section>
+      <!-- ----- End Sort Controls ----- -->
+
     </div>
+    <!-- ========== End Top Grid ========== -->
 
+    <!-- ========== Message Box for displaying messages to the user. ========== -->
     <section id="msg" class="msgBox" aria-live="polite"></section>
+    <!-- ========== End Message Box ========== -->
 
+    <!-- ========== Bottom Grid containing search and maintenance forms. ========== -->
     <div class="bottom-grid">
+
+      <!-- ----- Start Search Section ----- -->
       <section class="search-panel" aria-labelledby="search-heading">
+        <!-- Tabs -->
         <div class="panel-tabs search-tabs">
           <h2 id="search-heading">Search with:</h2>
           <button type="button" id="searchByIdBtn" class="search-mode active" aria-pressed="true">ID</button>
           <button type="button" id="searchByTitleBtn" class="search-mode" aria-pressed="false">Title</button>
         </div>
+        <!-- End Tabs -->
+        <!-- Search Form -->
         <form id="form-list-control" class="panel-body search-form">
           <div class="field-row">
             <label for="searchInput" id="searchLabel">Movie ID:</label>
@@ -52,15 +69,20 @@
           </div>
           <button type="button" id="searchBtn" class="submit-button">Submit</button>
         </form>
+        <!-- End Search Form -->
       </section>
+      <!-- ----- End Search Section ----- -->
 
+      <!-- ----- Start Maintenance Forms ----- -->
       <section class="maintenance-panel" aria-label="Movie maintenance">
+        <!-- Tabs -->
         <div class="panel-tabs tab">
           <button type="button" class="tablinks" onclick="openForm(event, 'Add')" id="defaultOpen">Add</button>
           <button type="button" class="tablinks" onclick="openForm(event, 'Update')">Update</button>
           <button type="button" class="tablinks" onclick="openForm(event, 'Delete')">Delete</button>
         </div>
-
+        <!-- End Tabs -->
+        <!-- Add Form  -->
         <div id="Add" class="tabcontent panel-body">
           <form id="form-add" class="maintenance-form">
             <div class="field-row"><label for="addMovieId">Movie ID:</label><input type="number" name="movieId" id="addMovieId" min="1"></div>
@@ -70,7 +92,8 @@
             <button type="button" id="addSubmit" class="submit-button">Submit</button>
           </form>
         </div>
-
+        <!-- End Add Form -->
+        <!-- Update Form -->
         <div id="Update" class="tabcontent panel-body">
           <form id="form-update" class="maintenance-form">
             <div class="field-row"><label for="upMovieId">Movie ID:</label><input type="number" name="movieId" id="upMovieId" min="1"></div>
@@ -80,19 +103,28 @@
             <button type="button" id="updateSubmit" class="submit-button">Submit</button>
           </form>
         </div>
-
+        <!-- End Update Form -->
+        <!-- Delete Form -->
         <div id="Delete" class="tabcontent panel-body">
           <form id="form-delete" class="maintenance-form">
             <div class="field-row"><label for="delMovieId">Movie ID:</label><input type="number" name="movieId" id="delMovieId" min="1"></div>
             <button type="button" id="deleteSubmit" class="submit-button">Submit</button>
           </form>
         </div>
+        <!-- End Delete Form -->
       </section>
-    </div>
+      <!-- ----- End Maintenance Forms ----- -->
 
+    </div>
+    <!-- ========== End Bottom Grid ========== -->
+
+    <!-- ========== Footer ========== -->
     <footer><p>Copyright &copy; <span id="date"></span> My Movie App</p></footer>
+    <!-- ========== End Footer ========== -->
+
   </main>
 
+  <!-- Load in scripts -->
   <script src="./js/movie.js"></script>
   <script src="./js/movie-list.js"></script>
   <script src="./js/app.js"></script>

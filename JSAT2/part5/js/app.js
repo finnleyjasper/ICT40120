@@ -1,6 +1,6 @@
 /**
  * @file app.js
- * @description This file contains the JavaScript for our movie app. It Creates the initial movies, connects buttons to their event handlers, and manages the forms and feedback messages in the UI.
+ * @description This file contains the JavaScript for the movie app. It Creates the initial movies, connects buttons to their event handlers, and manages the forms and feedback messages in the UI.
  */
 
 // MOVIES ========================================================================

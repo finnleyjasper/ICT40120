@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Inria+Sans:wght@400;700&display=swap");
 
+/* Defines reusable colour variables for the application's palette. */
 :root {
   --white: #ffffff;
   --black: #000000;
@@ -8,10 +9,12 @@
   --blue: #99bcff;
 }
 
+/* Makes padding and borders count towards every element's set dimensions. */
 * {
   box-sizing: border-box;
 }
 
+/* Sets the page's base colours, font, and removes the browser's body margin. */
 body {
   margin: 0;
   background: var(--white);
@@ -19,11 +22,13 @@ body {
   font-family: "Inria Sans", sans-serif;
 }
 
+/* Centres the application and limits its maximum desktop width. */
 .container {
   width: min(90%, 1000px);
   margin: 24px auto 38px;
 }
 
+/* Styles the main Movie Management heading at the top of the page. */
 h1 {
   margin: 0 0 24px;
   color: var(--purple);
@@ -33,33 +38,39 @@ h1 {
   text-transform: uppercase;
 }
 
+/* Applies consistent formatting to all section headings - ie. "Search With" etc. */
 h2 {
   margin: 0;
   font-weight: 400;
   text-transform: uppercase;
 }
 
+/* Makes buttons and inputs inherit the page's Inria Sans font. */
 button,
 input {
   font: inherit;
 }
 
+/* Shows a pointer cursor when the user hovers over a button. */
 button {
   cursor: pointer;
 }
 
+/* Adds a visible keyboard-focus outline to interactive controls for accessibility! */
 button:focus-visible,
 input:focus-visible {
   outline: 3px solid var(--purple);
   outline-offset: 2px;
 }
 
+/* Places the movie list and sort controls beside each other. */
 .top-grid {
   display: grid;
   grid-template-columns: 2.7fr 1fr;
   gap: 12px;
 }
 
+/* Gives the Movie List and Sort By headings their shared banner style. */
 .movie-panel h2,
 .sort-panel h2 {
   min-height: 58px;
@@ -70,10 +81,12 @@ input:focus-visible {
   font-size: 1.8rem;
 }
 
+/* Uses a slightly smaller heading size for the narrower sort panel. */
 .sort-panel h2 {
   font-size: 1.35rem;
 }
 
+/* Creates the bordered, scrollable area containing the movie rows. */
 .list {
   height: 200px;
   margin: 0;
@@ -86,6 +99,7 @@ input:focus-visible {
   counter-reset: movie-row;
 }
 
+/* Styles and aligns the ID, Title, Year, and Rating column headings. */
 .movie-list-header {
   height: 34px;
   padding: 5px 20px;
@@ -101,6 +115,7 @@ input:focus-visible {
   text-transform: uppercase;
 }
 
+/* Arranges each movie's row number and details in aligned columns. */
 .list .row {
   display: grid;
   grid-template-columns: 34px 1fr;
@@ -111,15 +126,18 @@ input:focus-visible {
   counter-increment: movie-row;
 }
 
+/* Generates and displays an automatic number at the start of each row. */
 .list .row::before {
   content: counter(movie-row) ".";
   font-weight: 700;
 }
 
+/* Changes a movie row's text to pink while the mouse is over it. */
 .list .row:hover {
   color: var(--pink);
 }
 
+/* Aligns each movie's ID, title, year, and rating with the header columns. */
 .movie-details {
   display: grid;
   grid-template-columns: 70px minmax(180px, 1fr) 70px 70px;
@@ -127,10 +145,12 @@ input:focus-visible {
   align-items: start;
 }
 
+/* Allows long movie details to wrap instead of overflowing their column. */
 .movie-details span {
   overflow-wrap: anywhere;
 }
 
+/* Creates the light-blue container for the three sort buttons. */
 .sort-buttons {
   height: 127px;
   margin-top: 4px;
@@ -139,6 +159,7 @@ input:focus-visible {
   background: var(--blue);
 }
 
+/* Styles each A-Z, Z-A, and Rating sort control. */
 .sort-buttons button {
   border: 0;
   border-bottom: 2px solid var(--white);
@@ -148,16 +169,19 @@ input:focus-visible {
   text-transform: uppercase;
 }
 
+/* Removes the divider underneath the final sort control. */
 .sort-buttons button:last-child {
   border-bottom: 0;
 }
 
+/* Emphasises a hovered or currently selected sort method. */
 .sort-buttons button:hover,
 .sort-buttons button.active {
   font-weight: 700;
   text-decoration: underline;
 }
 
+/* Styles the large pink Refresh button underneath the sort controls. */
 .refresh-button {
   width: 100%;
   height: 100px;
@@ -170,16 +194,19 @@ input:focus-visible {
   text-transform: uppercase;
 }
 
+/* Changes Submit buttons to light blue when hovered. */
 .submit-button:hover {
   background: var(--blue);
 }
 
+/* Changes Refresh to dark purple with white text when hovered. */
 .refresh-button:hover {
   background: var(--purple);
   color: var(--white);
   font-weight: 700;
 }
 
+/* Styles the hidden area used for success, warning, and error messages. */
 .msgBox {
   display: none;
   margin: 7px 0;
@@ -187,6 +214,7 @@ input:focus-visible {
   text-align: center;
 }
 
+/* Places the search and movie-maintenance panels beside each other. */
 .bottom-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -194,6 +222,7 @@ input:focus-visible {
   margin-top: 19px;
 }
 
+/* Creates the shared dark-purple tab bar used by both lower panels. */
 .panel-tabs {
   height: 64px;
   display: grid;
@@ -202,16 +231,19 @@ input:focus-visible {
   color: var(--white);
 }
 
+/* Sets the column widths for Search With, ID, and Title. */
 .search-tabs {
   grid-template-columns: 1.35fr 0.9fr 0.9fr;
 }
 
+/* Positions and sizes the Search With heading inside its tab bar. */
 .search-tabs h2 {
   align-self: center;
   padding-left: 13px;
   font-size: 1.35rem;
 }
 
+/* Styles all buttons contained in the lower panel tab bars. */
 .panel-tabs button {
   margin: 11px 0;
   border: 0;
@@ -222,6 +254,7 @@ input:focus-visible {
   text-transform: uppercase;
 }
 
+/* Highlights hovered and selected lower-panel tabs in light blue. */
 .panel-tabs button:hover,
 .panel-tabs button.active {
   color: var(--blue);
@@ -229,14 +262,17 @@ input:focus-visible {
   text-decoration: underline;
 }
 
+/* Divides the maintenance tab bar equally between Add, Update, and Delete. */
 .tab {
   grid-template-columns: repeat(3, 1fr);
 }
 
+/* Removes the unnecessary left divider from the first maintenance tab. */
 .tab button:first-child {
   border-left: 0;
 }
 
+/* Creates the shared bordered content area beneath each lower tab bar. */
 .panel-body {
   height: 250px;
   margin-top: 0;
@@ -246,20 +282,24 @@ input:focus-visible {
   background: var(--white);
 }
 
+/* Hides maintenance panels until their corresponding tab is selected. */
 .tabcontent {
   display: none;
 }
 
+/* Centres the controls and Submit buttons in the lower-panel forms. */
 .search-form,
 .maintenance-form {
   text-align: center;
 }
 
+/* Vertically aligns the short Search and Delete forms within their panels. */
 .search-form,
 #Delete {
   padding-top: 60px;
 }
 
+/* Places each form label and input side by side in a consistent row. */
 .field-row {
   display: grid;
   grid-template-columns: 100px 1fr;
@@ -269,12 +309,14 @@ input:focus-visible {
   text-align: left;
 }
 
+/* Styles form labels and prevents them from breaking onto multiple lines. */
 .field-row label {
   font-size: 1.05rem;
   text-transform: uppercase;
   white-space: nowrap;
 }
 
+/* Gives all form inputs consistent dimensions, borders, and colours. */
 .field-row input {
   width: 100%;
   height: 30px;
@@ -286,6 +328,7 @@ input:focus-visible {
   font-size: 1rem;
 }
 
+/* Styles the pink Submit buttons used by search and maintenance forms. */
 .submit-button {
   min-width: 167px;
   margin-top: 3px;
@@ -298,11 +341,13 @@ input:focus-visible {
   text-transform: uppercase;
 }
 
+/* Matches the Submit-button spacing in the short Search and Delete forms. */
 .search-form .submit-button,
 #Delete .submit-button {
   margin-top: 43px;
 }
 
+/* Positions and colours the copyright information below the application. */
 footer {
   margin: 20px 0 0;
   color: var(--purple);
