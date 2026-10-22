@@ -134,7 +134,7 @@ input:focus-visible {
 
 /* Changes a movie row's text to pink while the mouse is over it. */
 .list .row:hover {
-  color: var(--pink);
+  color: var(--purple);
 }
 
 /* Aligns each movie's ID, title, year, and rating with the header columns. */
@@ -209,6 +209,11 @@ input:focus-visible {
 /* Styles the hidden area used for success, warning, and error messages. */
 .msgBox {
   display: none;
+  background-color: var(--blue);
+  color: var(--purple);
+  border: 3px dashed var(--purple);
+  font-weight: bold;
+  font-size: 1.1em;
   margin: 7px 0;
   padding: 7px;
   text-align: center;
@@ -345,6 +350,74 @@ input:focus-visible {
 .search-form .submit-button,
 #Delete .submit-button {
   margin-top: 43px;
+}
+
+/* MODAL BOX STYLING */
+
+/* Styles the modal box shown before a movie is deleted. */
+.delete-modal {
+  width: min(90%, 430px);
+  padding: 0;
+  border: 4px solid var(--blue);
+  background: var(--white);
+  color: var(--black);
+  text-align: center;
+}
+
+/* Darkens the rest of the page while the delete modal is open! */
+.delete-modal::backdrop {
+  background: rgb(44 0 102 / 60%);
+}
+
+/* Gives the delete modal heading the application's purple banner style. */
+.delete-modal h2 {
+  padding: 14px;
+  background: var(--purple);
+  color: var(--white);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+/* Adds readable spacing around the delete confirmation question. */
+.delete-modal p {
+  margin: 0;
+  padding: 28px 24px 20px;
+  font-size: 1.1rem;
+}
+
+/* Places the modal's Cancel and Delete buttons next to each other. */
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  padding: 0 24px 24px;
+}
+
+/* Applies the shared size and text styling to both modal buttons. */
+.modal-buttons button {
+  min-width: 130px;
+  padding: 9px 17px;
+  border: 0;
+  color: var(--purple);
+  font-size: 1.1rem;
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+/* Gives the modal's Cancel button the light-blue secondary colour. */
+#cancelDeleteBtn {
+  background: var(--blue);
+}
+
+/* Gives the modal's Delete button the pink action colour. */
+#confirmDeleteBtn {
+  background: var(--pink);
+}
+
+/* Makes a modal button bold and underlined when the mouse is over it. */
+.modal-buttons button:hover {
+  font-weight: 700;
+  text-decoration: underline;
 }
 
 /* Positions and colours the copyright information below the application. */

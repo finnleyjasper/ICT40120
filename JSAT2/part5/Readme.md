@@ -5,7 +5,7 @@ CSS and JavaScript
 
 The application stores an array of `Movie` objects. Each movie has:
 
-- a unique, user-supplied Movie ID
+- a unique, randomly generated Movie ID
 - a title
 - a release year
 - a rating from 1 to 5
@@ -46,7 +46,7 @@ The **Refresh** button:
 
 The maintenance panel contains three tabs:
 
-- **Add** creates a new movie when its details are valid and its ID is unique
+- **Add** creates a new movie and generates a unique random ID
 - **Update** loads and changes an existing movie using its Movie ID
 - **Delete** finds a movie by ID and asks for confirmation before removing it
 
@@ -56,8 +56,6 @@ The displayed movie list refreshes after each successful change.
 
 Before a movie is added or updated, the application checks that:
 
-- Movie ID is a positive whole number
-- Movie ID is unique when adding a new movie
 - Title is not empty
 - Year is a positive whole number
 - Rating is a whole number from 1 to 5
@@ -84,7 +82,7 @@ Important methods include:
 - `removeElements()` clears displayed rows without deleting stored movies
 - `findIndexById(movieId)` returns a matching array index or `-1`
 - `getMovieById(movieId)` returns a matching movie or `null`
-- `add(movieId, title, year, rating)` adds a movie with a unique ID
+- `add(title, year, rating)` adds a movie with a unique generated ID
 - `update(movieId, title, year, rating)` updates a movie by ID
 - `delete(movieId)` deletes a movie by ID
 - `sortA2Z()` sorts titles in ascending order

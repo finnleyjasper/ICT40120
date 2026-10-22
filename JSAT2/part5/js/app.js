@@ -5,17 +5,17 @@
 
 // MOVIES ========================================================================
 /**
- * The initial movies displayed when the page loads. Each entry is an instance
- * of the Movie class, with an ID, title, release year, and rating.
- * @type {Movie[]}
+ * The mock details used to create the initial movies when the page loads.
+ * MovieList creates each Movie and ensures its generated ID is unique.
+ * @type {Array<(string|number)[]>}
  */
-const initialMovies = [
-  new Movie(101, "Super Amazing Film", 1984, 5),
-  new Movie(205, "Really Terrible Movie", 2005, 2),
-  new Movie(312, "Funny Movie", 2012, 4),
-  new Movie(418, "Just Okay Film", 2008, 3),
-  new Movie(523, "I Can't Believe They Made Another: Really Terrible Movie II", 2009, 1),
-  new Movie(634, "Some Romcom", 2004, 3)
+const initialMovieDetails = [
+  ["Super Amazing Film", 1984, 5],
+  ["Really Terrible Movie", 2005, 2],
+  ["Funny Movie", 2012, 4],
+  ["Just Okay Film", 2008, 3],
+  ["I Can't Believe They Made Another: Really Terrible Movie II", 2009, 1],
+  ["Some Romcom", 2004, 3]
 ];
 
 /**
@@ -23,7 +23,15 @@ const initialMovies = [
  * ID of the HTML element where MovieList displays the movies.
  * @type {MovieList}
  */
-const movieList = new MovieList("list", initialMovies);
+const movieList = new MovieList("list", []);
+
+// Add the starting movies through MovieList so every generated ID is unique.
+for (const details of initialMovieDetails) {
+  movieList.add(details[0], details[1], details[2]);
+}
+
+// Display the initial movies in the same default ID order used by Refresh.
+movieList.sortById();
 
 // EVENT HANDLERS ========================================================================
 
@@ -39,6 +47,10 @@ const searchByTitleButton = document.getElementById("searchByTitleBtn");
 const addSubmit = document.getElementById("addSubmit");
 const updateSubmit = document.getElementById("updateSubmit");
 const deleteSubmit = document.getElementById("deleteSubmit");
+const deleteConfirmModal = document.getElementById("deleteConfirmModal");
+const deleteModalMessage = document.getElementById("deleteModalMessage");
+const cancelDeleteButton = document.getElementById("cancelDeleteBtn");
+const confirmDeleteButton = document.getElementById("confirmDeleteBtn");
 // This input will use a change handler rather than click.
 const updateMovieId = document.getElementById("upMovieId");
 
@@ -53,28 +65,29 @@ searchByTitleButton.addEventListener("click", selectTitleSearch);
 addSubmit.addEventListener("click", addClick);
 updateSubmit.addEventListener("click", updateClick);
 deleteSubmit.addEventListener("click", deleteClick);
+cancelDeleteButton.addEventListener("click", cancelDelete);
+confirmDeleteButton.addEventListener("click", confirmDelete);
+deleteConfirmModal.addEventListener("cancel", cancelDelete);
 // Load the existing movie details when the user changes the update form's ID.
 updateMovieId.addEventListener("change", getUpdateMovieData);
 
 // VALIDATION =========================================================================
 
 /**
- * Checks the values entered in the add or update form before saving a movie.
- * An ID and year must be positive whole numbers, the title must contain text,
- * and the rating must be a whole number from 1 to 5.
- * @param {number} movieId - The user-supplied movie ID.
+ * Checks the title, year, and rating entered before saving a movie.
+ * The year must be a positive whole number, the title must contain text, and
+ * the rating must be a whole number from 1 to 5.
  * @param {string} title - The movie title.
  * @param {number} year - The release year.
  * @param {number} rating - The rating from 1 to 5.
  * @returns {boolean} True when every value is valid.
  */
-function movieDetailsAreValid(movieId, title, year, rating) {
+function movieDetailsAreValid(title, year, rating) {
   // All conditions must be true for the movie details to be valid.
   // const pattern = /^[a-z0-9\s]*$/i
 
 
-  return Number.isInteger(movieId) && movieId > 0 &&
-    title.trim() !== "" &&
+  return title.trim() !== "" &&
     Number.isInteger(year) && year > 0 &&
     Number.isInteger(rating) && rating >= 1 && rating <= 5;
 }
@@ -181,41 +194,34 @@ function refreshClick() {
 }
 
 /**
- * Reads the add form, validates the details, and adds a new movie if its ID
- * has not already been used.
+ * Reads the add form, validates the details, and adds a new movie with a
+ * unique randomly generated ID.
  * @event Click#addSubmit
  * @function addClick
  * @description add a new movie to the list
  */
 function addClick() {
-  // Get the add form and read each of its four input fields.
+  // Get the add form and read each of its three input fields.
   const form = document.getElementById("form-add");
-  // Number() converts the text supplied by number inputs to JavaScript numbers.
-  const movieId = Number(form.elements.movieId.value);
   // Remove accidental spaces before and after the title.
   const title = form.elements.title.value.trim();
   const year = Number(form.elements.year.value);
   const rating = Number(form.elements.rating.value);
 
   // Stop before changing the movie list if any required detail is invalid.
-  if (!movieDetailsAreValid(movieId, title, year, rating)) {
+  if (!movieDetailsAreValid(title, year, rating)) {
     showMessage(
-      "Enter a positive whole-number ID and year, a title, and a rating from 1 to 5.",
-      "var(--pink)",
-      "var(--black)"
+      "Enter a title, a positive whole-number year, and a rating from 1 to 5."
     );
     return; // Leave the form filled so the user can correct it.
   }
 
-  // add() returns false if another movie already has the entered ID.
-  if (!movieList.add(movieId, title, year, rating)) {
-    showMessage("That Movie ID is already in use.", "var(--pink)", "var(--black)");
-    return; // Do not clear the form when the ID must be changed.
-  }
+  // MovieList generates an ID and retries automatically if it is already used.
+  const movie = movieList.add(title, year, rating);
 
   // The movie was added successfully; clear the form and show confirmation.
   form.reset();
-  showMessage("Movie added", "var(--purple)", "var(--white)");
+  showMessage(`Movie added with ID ${movie.movieId}`);
 }
 
 /**
@@ -234,7 +240,7 @@ function getUpdateMovieData() {
     form.elements.title.value = "";
     form.elements.year.value = "";
     form.elements.rating.value = "";
-    showMessage("No movie has that ID.", "var(--purple)", "var(--white)");
+    showMessage("No movie has that ID.");
     return; // There is no movie data to copy into the form.
   }
 
@@ -258,24 +264,27 @@ function updateClick() {
   const rating = Number(form.elements.rating.value);
 
   // Do not send invalid values to MovieList.
-  if (!movieDetailsAreValid(movieId, title, year, rating)) {
-    showMessage("Enter valid details before updating.", "var(--pink)", "var(--black)");
+  if (!Number.isInteger(movieId) || movieId <= 0 ||
+      !movieDetailsAreValid(title, year, rating)) {
+    showMessage("Enter valid details before updating.");
     return; // Keep the entered details available for correction.
   }
 
   // update() returns false when the ID is not present in the movie list.
   if (!movieList.update(movieId, title, year, rating)) {
-    showMessage("No movie has that ID.", "var(--purple)", "var(--white)");
+    showMessage("No movie has that ID.");
     return;
   }
 
   // A successful update redraws the list; now clear the form and report it.
   form.reset();
-  showMessage("Movie updated", "var(--purple)", "var(--white)");
+  showMessage("Movie updated");
 }
 
+let pendingDeleteMovieId = null;
+
 /**
- * Finds a movie by its ID, asks the user to confirm, and deletes that movie.
+ * Finds a movie by its ID and opens the deletion confirmation modal.
  * @returns {void}
  */
 function deleteClick() {
@@ -286,25 +295,51 @@ function deleteClick() {
 
   // Do not ask for confirmation when the entered ID does not exist.
   if (movie === null) {
-    showMessage("No movie has that ID.", "var(--purple)", "var(--white)");
+    showMessage("No movie has that ID.");
     return;
   }
 
-  // window.confirm() returns true for OK and false for Cancel.
-  const shouldDelete = window.confirm(
-    `Do you want to delete movie "${movie.title}"?`
-  );
+  // Remember which movie will be deleted if the user confirms the modal.
+  pendingDeleteMovieId = movieId;
+  deleteModalMessage.textContent =
+    `Do you want to delete movie "${movie.title}"?`;
+  deleteConfirmModal.showModal();
+}
 
-  // Cancel leaves the movie list unchanged.
-  if (!shouldDelete) {
-    showMessage("Delete cancelled", "var(--purple)", "var(--white)");
+/**
+ * Closes the delete modal without changing the movie array.
+ * @param {Event} [event] - The optional dialog cancel event.
+ * @returns {void}
+ */
+function cancelDelete(event) {
+  // Prevent the Escape key from closing the modal before this function runs.
+  if (event) {
+    event.preventDefault();
+  }
+
+  pendingDeleteMovieId = null;
+  deleteConfirmModal.close();
+  showMessage("Delete cancelled");
+}
+
+/**
+ * Deletes the selected movie after confirmation in the modal.
+ * @returns {void}
+ */
+function confirmDelete() {
+  // Do nothing if no movie has been selected for deletion.
+  if (pendingDeleteMovieId === null) {
     return;
   }
 
-  // Remove the movie by ID, then clear the form and show confirmation.
-  movieList.delete(movieId);
+  const form = document.getElementById("form-delete");
+
+  // Remove the selected movie, reset the form, and close the modal.
+  movieList.delete(pendingDeleteMovieId);
+  pendingDeleteMovieId = null;
   form.reset();
-  showMessage("Movie deleted", "var(--purple)", "var(--white)");
+  deleteConfirmModal.close();
+  showMessage("Movie deleted");
 }
 
 // UI functions for the maintenance tabs and user feedback.
@@ -339,22 +374,29 @@ function openForm(event, action) {
   event.currentTarget.className += " active";
 }
 
+let messageTimeoutId;
+
 /**
- * Displays a success, error, or cancellation message in the message box.
+ * Displays a success, error, or cancellation message for five seconds.
  * @param {string} message - The message to display.
- * @param {string} colour - The message background colour.
- * @param {string} textColour - The message text colour.
  * @returns {void}
  */
-function showMessage(message, colour, textColour) {
+function showMessage(message) {
   // Find the message area shared by the add, update, and delete forms.
   const messageBox = document.getElementById("msg");
 
-  // Make it visible, set its text, and apply the supplied colours.
+  // Stop an older timer from hiding this new message too early using built-in clearTimeout().
+  clearTimeout(messageTimeoutId);
+
+  // Make the message visible and set its text.
   messageBox.style.display = "block";
   messageBox.textContent = message;
-  messageBox.style.backgroundColor = colour;
-  messageBox.style.color = textColour;
+
+  // Hide and clear the message after five seconds with an anonymous function.
+  messageTimeoutId = setTimeout(function() {
+    messageBox.style.display = "none";
+    messageBox.textContent = "";
+  }, 5000);
 }
 
 // Open the default maintenance tab when the page first loads.

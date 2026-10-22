@@ -137,27 +137,28 @@ class MovieList {
   // CRUD ========================================================================
 
   /**
-   * Adds a new Movie object when its ID is not already used. The application
-   * validates the entered values before calling this method.
-   * @param {number} movieId - The unique movie ID.
+   * Creates a Movie with a randomly generated ID. If that ID is already used,
+   * it creates another Movie until a unique ID is generated.
    * @param {string} title - The movie title.
    * @param {number} year - The movie release year.
    * @param {number} rating - The movie rating from 1 to 5.
-   * @returns {boolean} True when added, or false when the ID already exists.
+   * @returns {Movie} The newly created Movie with its unique generated ID.
    */
-  add(movieId, title, year, rating) {
-    // Reject duplicate IDs.
-    if (this.findIndexById(movieId) !== -1) {
-      return false;
-    }
+  add(title, year, rating) {
+    let movie;
 
-    // Create a Movie instance and append it to the stored array.
-    this.movieList.push(new Movie(movieId, title, year, rating));
+    // Keep generating a Movie until its random ID is not already in the array.
+    do {
+      movie = new Movie(title, year, rating);
+    } while (this.findIndexById(movie.movieId) !== -1);
+
+    // Append the Movie with its unique generated ID to the stored array.
+    this.movieList.push(movie);
     // Display the updated array.
     this.refresh();
 
-    // Indicate a success!
-    return true;
+    // Return the new object so the application can show its generated ID.
+    return movie;
   }
 
   /**

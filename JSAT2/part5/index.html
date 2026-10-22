@@ -85,7 +85,6 @@
         <!-- Add Form  -->
         <div id="Add" class="tabcontent panel-body">
           <form id="form-add" class="maintenance-form">
-            <div class="field-row"><label for="addMovieId">Movie ID:</label><input type="number" name="movieId" id="addMovieId" min="1"></div>
             <div class="field-row"><label for="addTitle">Title:</label><input type="text" name="title" id="addTitle"></div>
             <div class="field-row"><label for="addYear">Year:</label><input type="number" name="year" id="addYear" min="1"></div>
             <div class="field-row"><label for="addRating">Rating:</label><input type="number" name="rating" id="addRating" min="1" max="5"></div>
@@ -117,6 +116,17 @@
 
     </div>
     <!-- ========== End Bottom Grid ========== -->
+
+    <!-- ========== Delete Confirmation Modal ========== -->
+    <dialog id="deleteConfirmModal" class="delete-modal" aria-labelledby="deleteModalHeading">
+      <h2 id="deleteModalHeading">Delete movie?</h2>
+      <p id="deleteModalMessage"></p>
+      <div class="modal-buttons">
+        <button type="button" id="cancelDeleteBtn">Cancel</button>
+        <button type="button" id="confirmDeleteBtn">Delete</button>
+      </div>
+    </dialog>
+    <!-- ========== End Delete Confirmation Modal ========== -->
 
     <!-- ========== Footer ========== -->
     <footer><p>Copyright &copy; <span id="date"></span> My Movie App</p></footer>
