@@ -74,22 +74,46 @@ updateMovieId.addEventListener("change", getUpdateMovieData);
 // VALIDATION =========================================================================
 
 /**
- * Checks the title, year, and rating entered before saving a movie.
- * The year must be a positive whole number, the title must contain text, and
- * the rating must be a whole number from 1 to 5.
- * @param {string} title - The movie title.
- * @param {number} year - The release year.
- * @param {number} rating - The rating from 1 to 5.
- * @returns {boolean} True when every value is valid.
+ * Returns a specific error for the first invalid field, or an empty string.
+ * @param {HTMLFormElement} form - The maintenance form to validate.
+ * @returns {string} The error message, if any.
  */
-function movieDetailsAreValid(title, year, rating) {
-  // All conditions must be true for the movie details to be valid.
-  // const pattern = /^[a-z0-9\s]*$/i
+function getMovieFormError(form) {
+  const fields = form.elements;
+  const numberRules = {
+    movieId: ["movie ID", 1, Infinity],
+    year: ["release year", 1, Infinity],
+    rating: ["rating", 1, 5]
+  };
 
-
-  return title.trim() !== "" &&
-    Number.isInteger(year) && year > 0 &&
-    Number.isInteger(rating) && rating >= 1 && rating <= 5;
+  // Check fields in the same order that they appear in the form.
+  for (const field of fields) {
+    if (field.name === "title") {
+      if (field.value.trim() === "") return "Please enter a movie title.";
+      continue;
+    }
+    const rule = numberRules[field.name];
+    if (!rule) continue;
+    const [label, min, max] = rule;
+    if (field.validity.badInput) {
+      return `Please enter a valid number for the ${label}.`;
+    }
+    if (field.value.trim() === "") return `Please enter a ${label}.`;
+    const value = Number(field.value);
+    if (!Number.isFinite(value)) return `Please enter a valid number for the ${label}.`;
+    if (field.name === "rating" &&
+        (!Number.isInteger(value) || value < min || value > max)) {
+      return "Please enter a valid rating: a whole number between 1 and 5.";
+    }
+    if (!Number.isInteger(value) || value < min) {
+      return `Please enter a valid ${label}: a positive whole number.`;
+    }
+    // Report unknown IDs before validating replacement movie details.
+    if (field.name === "movieId" && movieList.getMovieById(value) === null) {
+      return `No movie has ID ${value}. Please enter an existing movie ID.`;
+    }
+  }
+  return "";
 }
 
 // ==========================
@@ -209,10 +233,9 @@ function addClick() {
   const rating = Number(form.elements.rating.value);
 
   // Stop before changing the movie list if any required detail is invalid.
-  if (!movieDetailsAreValid(title, year, rating)) {
-    showMessage(
-      "Enter a title, a positive whole-number year, and a rating from 1 to 5."
-    );
+  const error = getMovieFormError(form);
+  if (error) {
+    showMessage(error);
     return; // Leave the form filled so the user can correct it.
   }
 
@@ -240,7 +263,7 @@ function getUpdateMovieData() {
     form.elements.title.value = "";
     form.elements.year.value = "";
     form.elements.rating.value = "";
-    showMessage("No movie has that ID.");
+    showMessage(getMovieFormError(form));
     return; // There is no movie data to copy into the form.
   }
 
@@ -264,9 +287,9 @@ function updateClick() {
   const rating = Number(form.elements.rating.value);
 
   // Do not send invalid values to MovieList.
-  if (!Number.isInteger(movieId) || movieId <= 0 ||
-      !movieDetailsAreValid(title, year, rating)) {
-    showMessage("Enter valid details before updating.");
+  const error = getMovieFormError(form);
+  if (error) {
+    showMessage(error);
     return; // Keep the entered details available for correction.
   }
 
@@ -291,6 +314,11 @@ function deleteClick() {
   // Read the ID from the delete form and retrieve the matching movie.
   const form = document.getElementById("form-delete");
   const movieId = Number(form.elements.movieId.value);
+  const error = getMovieFormError(form);
+  if (error) {
+    showMessage(error);
+    return;
+  }
   const movie = movieList.getMovieById(movieId);
 
   // Do not ask for confirmation when the entered ID does not exist.
